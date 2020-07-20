@@ -1,0 +1,74 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+[(#REM) Cf.: http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+]<!--[if lt IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie7"> <![endif]-->
+<!--[if IE 8 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie8"> <![endif]-->
+<!--[if IE 9 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js"> <!--<![endif]-->
+<head>
+	<script type='text/javascript'>/*<![CDATA[*/(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement);/*]]>*/</script>
+	<title><:artaclim:gestion_indicateurs:> [(#NOM_SITE_SPIP|textebrut)]</title>
+	<INCLURE{fond=inclure/head} />
+</head>
+
+<body class="pas_surlignable page_sommaire">
+<div class="page">
+	
+	<div class="main">
+		[(#SESSION{id_auteur}|non)
+			<div class="ajax">#FORMULAIRE_CONNEXIONPUBLIC</div>
+		]
+		[(#SESSION{id_auteur}|oui)
+			[(#SESSION{statut}|=={0minirezo}|oui)
+			<INCLURE{fond=inclure/navadmin,env}>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-12 col-lg-10 col-xl-8 ">
+						<h1 class="text-center">Données pour l'indicateur:</h1>
+						<h3 class="text-center mb-4">#TITRE</h3>
+						<div class="text-center mx-1 mx-md-3 mx-xl-5"><INCLURE{fond=inclure/explication_type,id_type_indicateur=#ID_TYPE_INDICATEUR}></div>
+						<div class="row justify-content-center my-4">
+							[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_SANS_DATA}}|non)
+							[(#ID_TYPE_INDICATEUR|=={4}|oui)
+							<div class="col-12 col-lg-6 mx-auto">
+								<div class="ajax">
+								#FORMULAIRE_CHARGERGEOJSON{#ID_INDICATEUR,#SELF}
+								</div>
+							</div>]
+							<div class="col-12 [(#ID_TYPE_INDICATEUR|=={4}|oui) col-lg-6]  mx-auto">
+								<div class="ajax">
+								#FORMULAIRE_CHARGERDONNEES{#ID_INDICATEUR,#SELF}
+								</div>
+							</div>
+							]
+							[(#ID_TYPE_INDICATEUR|=={5}|oui)
+							<div class="col-12 text-center [(#ID_TYPE_INDICATEUR|=={4}|oui) col-lg-6]  mx-auto">
+								<div class="ajax">
+								#FORMULAIRE_DONNEESOBJECTIF{#ID_INDICATEUR,#URL_PAGE{parametrer_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR}}
+								</div>
+							</div>
+							]
+							[(#ID_TYPE_INDICATEUR|=={6}|oui)
+							<div class="col-12 text-center [(#ID_TYPE_INDICATEUR|=={4}|oui) col-lg-6]  mx-auto">
+								<div class="ajax">
+								#FORMULAIRE_DONNEESNOMBRE{#ID_INDICATEUR,#URL_PAGE{parametrer_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR}}
+								</div>
+							</div>]
+						</div>
+					</div>
+				</div>
+			</div>
+			]
+			[(#SESSION{statut}|=={0minirezo}|non)
+				<h2 class="error"><:artaclim:erreur_autorisation:></h2>
+			]
+		]
+	</div><!--.main-->
+	
+	<INCLURE{fond=inclure/footer,self=#SELF} />
+	
+</div><!--.page-->
+</body>
+</html>
+</BOUCLE_indicateur>

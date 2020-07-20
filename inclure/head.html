@@ -1,0 +1,53 @@
+[(#REM)
+	Head standard de toutes les pages ;
+	les elements specifiques (title, description) figurent dans chaque squelette
+ 
+]
+<meta http-equiv="Content-Type" content="text/html; charset=#CHARSET" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+[<link rel="stylesheet" href="(#CHEMIN{lib/leaflet/leaflet.css})" />]
+[<link rel="stylesheet" href="(#CHEMIN{css/huebee.min.css})" />]
+#INSERT_HEAD_CSS
+[<link rel="stylesheet" href="(#CHEMIN{css/print.css})" media="print"/>]
+[(#REM)
+	Balise permettant aux plugins d'inserer des appels javascript ;
+	4. C'est ici que SPIP va inserer l'appel de la librairie jQuery
+	5. Et appeler a la fin compacte_head pour agreger et compacter tout le head dans des fichiers statiques si l'option est cochee dans Configuration
+]
+#INSERT_HEAD
+
+<link href="https://fonts.googleapis.com/css?family=Krub:400,400i,700&display=swap" rel="stylesheet"> 
+[<script src="(#CHEMIN{js/huebee.pkgd.min.js})" type="text/javascript"></script>]
+
+[(#REM) Scripts pour les représentations d'indicateurs numériques]
+[<script src="(#CHEMIN{js/moment-with-locales.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/Chart.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/chartjs-plugin-trendline.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/chartjs-plugin-annotation.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/chartjs-gauge.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/chartjs-plugin-datalabels.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/Chart.options.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/chroma.min.js})" type="text/javascript"></script>]
+
+[(#REM) Scripts pour les représentations d'indicateurs carto]
+
+[<script src="(#CHEMIN{lib/leaflet/leaflet.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{lib/leaflet/leaflet-providers.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{lib/leaflet/leaflet.ajax.min.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{lib/leaflet/leaflet-image.js})" type="text/javascript"></script>]
+[<script src="(#CHEMIN{js/communes-73-74.min.js})" type="text/javascript"></script>]
+
+[(#REM) Fierement fabrique avec SPIP ]
+<meta name="generator" content="SPIP" />
+
+[(#REM) Favicon ]
+[<link rel="icon" type="image/x-icon" href="(#CHEMIN{favicon.ico})" />
+[<link rel="shortcut icon" type="image/x-icon" href="(#CHEMIN{favicon.ico})" />]]
+
+[(#REM) meta robots ]
+[<meta name="robots" content="(#ENV{robots})" />]
+<script>
+Chart.plugins.unregister(ChartDataLabels);
+
+</script>

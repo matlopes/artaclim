@@ -1,0 +1,69 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+
+<div class='formulaire_spip formulaire_parametrerindicateur_carto' id='formulaire_parametrerindicateur_carto-#ENV{id,new}'>
+
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+[(#SET{nbjeux,0})]
+#SET{intitules,#ARRAY}
+<BOUCLE_data(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+
+		<BOUCLE_entete(DATA){source csv,#FICHIER}{0,1}>
+		[(#SET{nbjeux,#VALEUR|count|div{2}|moins{1}})]
+		[(#SET{intitules,#VALEUR|array_slice{1,#GET{nbjeux}}})]
+		</BOUCLE_entete>
+
+		
+		<div class="row">
+			[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_couleurs}|oui)
+			<div class="col-12 col-lg-6" id="couleurs">
+				<h5><:artaclim:couleur:></h5>
+				<p><small><:artaclim:explication_couleur_zone:></small></p>
+				<h6 class="text-left">[(#GET{intitules}|table_valeur{0})]</h6>
+				<div class="d-flex align-items-center mb-2">
+					<input type="text" id="couleur" name="couleur" class="palette mr-2" [value="(#ENV{couleur})"] />
+					<small><:artaclim:couleur_zones:></small>
+				</div>
+			</div>
+			]
+			<div class="col-12 col-lg-6">
+				<B_usages>
+				<h6 class="font-weight-bold">#INFO_TITRE{groupe_mot,2}</h6>
+				<div class="text-left mb-3">
+				<BOUCLE_usages(MOTS){id_groupe=2}>
+					<div class="form-check pl-0">
+					  <input class="form-check-input" type="radio" name="usage" id="usage#ID_MOT" value="#ID_MOT" [(#ENV**{usage}|=={#ID_MOT}|oui)checked]>
+					  <label class="form-check-label" for="usage#ID_MOT">
+					    #TITRE
+					  </label>
+					</div>
+				</BOUCLE_usages>
+				</div>
+			</div>
+		</div>
+		<div class="row my-4 justify-content-center">
+			<div class="col-12 col-lg-6 text-center">
+				<small><:artaclim:info_enregistrement:></small>
+			</div>
+		</div>
+		<div class="row mb-4 justify-content-center text-center">
+			<div class="col-12 col-md-6 mb-2">
+			 <button type="submit" class="btn  btn-outline-light" name='sauvegarder' value="sauvegarder">[(#CHEMIN{images/pict-enregistrer.svg}|balise_svg) ] <:artaclim:sauvegarder:> </button>
+			</div>
+		</div>
+		
+</BOUCLE_data>
+
+<p class="error"><:artaclim:erreur_pas_de_donnees:> [<a href="(#URL_PAGE{donnees_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})"><:artaclim:charger_donnees:></a>]</p>
+
+<//B_data>
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_indicateur>

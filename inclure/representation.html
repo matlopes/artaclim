@@ -1,0 +1,46 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+
+[(#REM)
+	- Simple :
+		- Line
+		- Bar
+		- Radar
+	- Multiple :
+		- Line
+		- Bar
+		- Radar (?)
+	- Multiple tout :
+		- Histogramme avec courbe du total 
+	- Spatial :
+		- Spatial
+	- Quali objectif :
+		- Quali objectif
+	- Nombre simple
+		- Nombre simple
+]
+#SET{type,#CONFIG_INDICATEUR|table_valeur{type_graphique}|sinon{line}}
+#SET{config_user,#ARRAY}
+<BOUCLE_configuser(spip_auteurs_liens){id_auteur=#SESSION{id_auteur}}{objet=indicateur}{id_objet=#ID_INDICATEUR}{0,1}>
+#SET{config_user,#CONFIG_INDICATEUR}
+</BOUCLE_configuser>
+[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_type_graphique}|oui)
+	#SET{type,#GET{config_user}|table_valeur{type_graphique}|sinon{#CONFIG_INDICATEUR|table_valeur{type_graphique}|sinon{line}}}
+]
+
+
+[(#ID_TYPE_INDICATEUR|in_array{#LISTE{1,2}}|oui)
+	<INCLURE{fond=representations/#GET{type},id_indicateur=#ID_INDICATEUR}>
+]
+[(#ID_TYPE_INDICATEUR|=={3}|oui)
+	<INCLURE{fond=representations/multi_tout,id_indicateur=#ID_INDICATEUR}>
+]
+[(#ID_TYPE_INDICATEUR|=={4}|oui)
+	<INCLURE{fond=representations/carto,id_indicateur=#ID_INDICATEUR}>
+]
+[(#ID_TYPE_INDICATEUR|=={5}|oui)
+	<INCLURE{fond=representations/objectif,id_indicateur=#ID_INDICATEUR}>
+]
+[(#ID_TYPE_INDICATEUR|=={6}|oui)
+	<INCLURE{fond=representations/nombre,id_indicateur=#ID_INDICATEUR}>
+]
+</BOUCLE_indicateur>

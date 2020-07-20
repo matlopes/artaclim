@@ -1,0 +1,46 @@
+#CACHE{0}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+[(#REM) Cf.: http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+]<!--[if lt IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie7"> <![endif]-->
+<!--[if IE 8 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie8"> <![endif]-->
+<!--[if IE 9 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js"> <!--<![endif]-->
+<head>
+	<script type='text/javascript'>/*<![CDATA[*/(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement);/*]]>*/</script>
+	<title><:artaclim:gestion_indicateurs:> [(#NOM_SITE_SPIP|textebrut)]</title>
+	<INCLURE{fond=inclure/head} />
+	[<script src="(#CHEMIN{js/list.js})"></script>]
+</head>
+
+<body class="pas_surlignable page_sommaire">
+<div class="page">
+
+	<div class="main">
+		[(#SESSION{id_auteur}|non)
+			<div class="ajax">#FORMULAIRE_CONNEXIONPUBLIC</div>
+		]
+		[(#SESSION{id_auteur}|oui)
+			[(#SESSION{statut}|=={0minirezo}|oui)
+				<INCLURE{fond=inclure/navadmin,env}>
+				<div class="container">
+					<div class="row">
+						<div class="col-12 text-center">
+							<h1 class="mt-0 mb-4 text-uppercase vert">[(#CHEMIN{images/pict-graph-barre-small.svg}|balise_svg{<:artaclim:gestion_indicateurs:>})] <:artaclim:gestion_indicateurs:></h1>
+							
+							<INCLURE{fond=inclure/liste_indicateurs}>
+						</div>
+					</div>
+				</div>
+				
+			]
+		]
+	</div><!--.main-->
+	
+	<INCLURE{fond=inclure/footer,self=#SELF} />
+	
+</div><!--.page-->
+</body>
+</html>
+
+

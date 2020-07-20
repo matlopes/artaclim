@@ -1,0 +1,158 @@
+#CACHE{0}
+<BOUCLE_user(AUTEURS){id_auteur=#SESSION{id_auteur}}{tout}>
+<div class="tableau-container container-fluid px-1 px-md-2 px-lg-5">
+	<div class="row p-0 pr-lg-5 d-print-none">
+		<div class="col-12">
+		<h1 class="text-center mb-0">[(#CHEMIN{images/img-tableau-bord.svg}|balise_svg)] <:artaclim:tableau_de_bord:></h1>
+		<h4 class="my-0">#INFO_TITRE{mot,12}</h4>
+		<hr class="separateur2 mt-0 mb-4 d-print-none" />
+		</div>
+	</div>
+	<div class="row p-0 pr-lg-5" id="sortable">
+	<BOUCLE_tableau(INDICATEURS){id_auteur}{!id_mot=13}{par ordre_tableau}{choisi_tableau=oui}>
+	<div class="col-xs-12 col-md-6 col-xxl-4 mb-4" data-indicateur="ordretab_#ID_INDICATEUR">
+		<div class="box-indicateur p-1 p-lg-2 pt-thematique position-relative">
+			<B_thematiques>
+			<div class="thematiques position-absolute d-flex">			
+			<BOUCLE_thematiques(MOTS){id_indicateur}{0,5}>
+				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE})</span>]
+			</BOUCLE_thematiques>
+			</div>
+			</B_thematiques>
+			<div class="titre">
+			<a href="#URL_INDICATEUR"><h6 class="text-center mb-0 font-weight-bold">#TITRE</h6></a>
+			<p class="m-0 text-center"><small class="lieu d-block">[[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ] (#LIEU)]</small></p>
+			</div>
+			<div class="pr-1"><INCLURE{fond=inclure/representation,id_indicateur}></div>
+			<div class="position-absolute box-actions box-top text-center d-print-none">
+				<span class="mover p-1 d-block" data-toggle="tooltip" data-placement="left" title="<:artaclim:deplacer:>">[(#CHEMIN{images/pict-deplacement.svg}|balise_svg)]</span>
+				<div class="autres-actions">
+				<div class="">
+					[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_EXPORTABLES}}|oui)<a href="#" id="imageDownloader#ID_INDICATEUR" download="indicateur#ID_INDICATEUR.png" target="_blank" data-toggle="tooltip" data-placement="left" title="<:artaclim:exporter_image:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-export-image.svg}|balise_svg)]</a>]
+					<BOUCLE_donnees(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+					[(#CONFIG_INDICATEUR|table_valeur{autoriser_telecharger_donnees}|=={1}|oui)
+					<a href="#FICHIER" target='_blank' data-toggle="tooltip" data-placement="left" title="<:artaclim:telecharger_donnees:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-import.svg}|balise_svg)]</a>
+					]
+					</BOUCLE_donnees>
+					<a href="#URL_INDICATEUR" data-toggle="tooltip" data-placement="left" title="<:artaclim:parametrer:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-param-small.svg}|balise_svg)]</a>
+					<a href="#URL_ACTION_AUTEUR{desepingler_indicateur,#ID_INDICATEUR-desepingler,#SELF}" onclick="return confirm('<:artaclim:confirmer_desepingler:> [(#TITRE|attribut_html)]');" data-toggle="tooltip" data-placement="left" title="<:artaclim:desepingler:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-corbeille-small.svg}|balise_svg)]</a>
+				</div>
+				<a class="plus-actions pt-0 px-1 pb-2 d-block">&mldr;</a>
+				</div>
+				
+			</div>
+			<div class="position-absolute box-actions box-bottom text-center  d-print-none">
+				<a onclick="return false;" class="p-1 d-block trigger-info">[(#CHEMIN{images/pict-info.svg}|balise_svg)]</a>
+				<a href="#URL_INDICATEUR" data-toggle="tooltip" data-placement="left" title="<:artaclim:zoom_indicateur:>" class="p-1 d-block">[(#CHEMIN{images/pict-voir-small.svg}|balise_svg)]</a>
+			</div>
+			<div class="position-absolute box-info p-3">
+				[(#DESCRIPTIF)]
+				[<h6><:artaclim:interpretation:></h6>
+				(#INTERPRETATION)]
+				[<p>[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ]<strong><:artaclim:lieu:></strong> (#LIEU)</p>]
+				[<p>[(#CHEMIN{images/pict-source-small.svg}|image_reduire{20}) ]<strong><:artaclim:source:></strong> (#SOURCE)</p>]
+			</div>
+		</div>
+	</div>
+	</BOUCLE_tableau>
+	<div class="col-6 mx-auto">
+		<h5 class="text-center"><:artaclim:tableau_vide:></h5>
+	</div>
+	<//B_tableau>
+	</div>
+	<B_pilotage>
+	<div class="row p-0 pr-lg-5 mt-4  d-print-none">
+		<div class="col-12">
+		<div class="d-flex justify-content-between align-items-end">
+		<h4 class="my-0">#INFO_TITRE{mot,13}</h4>
+		<div class="ajax pb-1  d-print-none savepilotage">
+			#FORMULAIRE_SAUVERDISPOSITION
+		</div>
+		</div>
+		<hr class="separateur2 mt-0 mb-4  d-print-none" />
+		</div>
+	</div>
+	<div class="row p-0 pr-lg-5" id="sortablepilotage">
+	<BOUCLE_pilotage(INDICATEURS){id_auteur}{id_mot=13}{par ordre_tableau}{choisi_tableau=oui}>
+	<div class="col-xs-12 col-md-6 col-xxl-4 mb-4" data-indicateur="ordretabpilotage_#ID_INDICATEUR">
+		<div class="box-indicateur p-1 p-lg-2 pt-thematique position-relative">
+			<B_thematiques2>
+			<div class="thematiques position-absolute d-flex">			
+			<BOUCLE_thematiques2(MOTS){id_indicateur}{0,5}>
+				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE})</span>]
+			</BOUCLE_thematiques2>
+			</div>
+			</B_thematiques2>
+			<div class="titre">
+			<a href="#URL_INDICATEUR"><h6 class="text-center mb-0 font-weight-bold">#TITRE</h6></a>
+			<p class="m-0 text-center"><small class="lieu d-block">[[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ] (#LIEU)]</small></p>
+			</div>
+			<div class="pr-1"><INCLURE{fond=inclure/representation,id_indicateur}></div>
+			<div class="position-absolute box-actions box-top text-center d-print-none">
+				<span class="mover p-1 d-block">[(#CHEMIN{images/pict-deplacement.svg}|balise_svg)]</span>
+				<div class="autres-actions">
+				<div class="">
+					[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_EXPORTABLES}}|oui)<a href="#" id="imageDownloader#ID_INDICATEUR" download="indicateur#ID_INDICATEUR.png" target="_blank" data-toggle="tooltip" data-placement="left" title="<:artaclim:exporter_image:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-export-image.svg}|balise_svg)]</a>]
+					<BOUCLE_donnees2(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+					[(#CONFIG_INDICATEUR|table_valeur{autoriser_telecharger_donnees}|=={1}|oui)
+					<a href="#FICHIER" target='_blank' data-toggle="tooltip" data-placement="left" title="<:artaclim:telecharger_donnees:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-import.svg}|balise_svg)]</a>
+					]
+					</BOUCLE_donnees2>
+					<a href="#URL_INDICATEUR" data-toggle="tooltip" data-placement="left" title="<:artaclim:parametrer:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-param-small.svg}|balise_svg)]</a>
+					<a href="#URL_ACTION_AUTEUR{desepingler_indicateur,#ID_INDICATEUR-desepingler,#SELF}" onclick="return confirm('<:artaclim:confirmer_desepingler:> [(#TITRE|attribut_html)]');" data-toggle="tooltip" data-placement="left" title="<:artaclim:desepingler:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-corbeille-small.svg}|balise_svg)]</a>
+				</div>
+				<a class="plus-actions pt-0 px-1 pb-2 d-block">&mldr;</a>
+				</div>
+				
+			</div>
+			<div class="position-absolute box-actions box-bottom text-center d-print-none">
+				<a onclick="return false;" class="p-1 d-block trigger-info">[(#CHEMIN{images/pict-info.svg}|balise_svg)]</a>
+				<a href="#URL_INDICATEUR" data-toggle="tooltip" data-placement="left" title="<:artaclim:zoom_indicateur:>" class="p-1 d-block">[(#CHEMIN{images/pict-voir-small.svg}|balise_svg)]</a>
+			</div>
+			<div class="position-absolute box-info p-3">
+				[(#DESCRIPTIF)]
+				[<h6><:artaclim:interpretation:></h6>
+				(#INTERPRETATION)]
+				[<p>[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ]<strong><:artaclim:lieu:></strong> (#LIEU)</p>]
+				[<p>[(#CHEMIN{images/pict-source-small.svg}|image_reduire{20}) ]<strong><:artaclim:source:></strong> (#SOURCE)</p>]
+			</div>
+		</div>
+	</div>
+	</BOUCLE_pilotage>
+	</div>
+	</B_pilotage>
+</div>
+
+<INCLURE{fond=inclure/scripts-tableau}>
+<script>
+  $( function() {
+    $( "#sortable" ).sortable({
+	handle: ".mover",
+	placeholder: "box-place col-sm-12 col-lg-6 col-xxl-4 mb-4",
+	tolerance: "pointer",
+	update: function( event, ui ) {
+		$('#nav-utilisateur .ordre_tableau').val($(this).sortable( "serialize" ,{attribute:"data-indicateur"}));
+		$('#nav-utilisateur .bouton_save').removeClass('disabled');
+		$('#nav-utilisateur .bouton_save').addClass('rose');
+		$('#nav-utilisateur .bouton_save').tooltip('show');
+	}
+	});
+	$( "#sortablepilotage" ).sortable({
+	handle: ".mover",
+	placeholder: "box-place col-sm-12 col-lg-6 col-xxl-4 mb-4",
+	tolerance: "pointer",
+	update: function( event, ui ) {
+		$('.ordre_tableau_pilotage').val($(this).sortable( "serialize" ,{attribute:"data-indicateur"}));
+		$('.savepilotage .bouton_save').removeClass('disabled');
+		$('.savepilotage .bouton_save').addClass('rose');
+		$('.savepilotage .bouton_save').tooltip('show');
+	}
+	});
+  } );
+$(document).on('click','.bouton_save',function(){
+	$(this).tooltip('hide');
+	$(this).tooltip('disable');
+	$(this).parent().submit();
+});
+</script>
+</BOUCLE_user>

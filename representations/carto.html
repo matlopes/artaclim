@@ -1,0 +1,120 @@
+<BOUCLE_indicateurs(INDICATEURS){id_indicateur}>
+<div id="carto#ID_INDICATEUR" class="map d-block"></div>
+<div id="chart-legends#ID_INDICATEUR" class="tendancespot"></div>
+<script>
+$( document ).ready(function() {
+	var map#ID_INDICATEUR = L.map('carto#ID_INDICATEUR', {
+		center: [45.65,6.36],
+		zoom: 8,
+		preferCanvas: true,
+		scrollWheelZoom: false
+	});
+	L.tileLayer.provider('Esri.WorldGrayCanvas').addTo(map#ID_INDICATEUR);
+//	L.tileLayer.provider('Esri.WorldTerrain').addTo(map#ID_INDICATEUR);
+//	L.tileLayer.provider('OpenMapSurfer.Hillshade').addTo(map#ID_INDICATEUR);
+	$("#carto#ID_INDICATEUR").height($("#carto#ID_INDICATEUR").width()/2 + 17)
+	#SET{config_user,#ARRAY}
+	<BOUCLE_configuser(spip_auteurs_liens){id_auteur=#SESSION{id_auteur}}{objet=indicateur}{id_objet=#ID_INDICATEUR}{0,1}>
+	#SET{config_user,#CONFIG_INDICATEUR}
+	</BOUCLE_configuser>
+	#SET{couleur,#CONFIG_INDICATEUR|table_valeur{couleur}|sinon{#CONST{_COULEURS_DEFAUT}|table_valeur{1}}}
+	[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_couleurs}|oui)
+		#SET{couleur,#GET{config_user}|table_valeur{couleur}|sinon{#CONFIG_INDICATEUR|table_valeur{couleur}|sinon{#CONST{_COULEURS_DEFAUT}|table_valeur{1}}}}
+	]
+	var couleurs#ID_INDICATEUR = [];
+	var data#ID_INDICATEUR = [];
+	var filtreCommunes#ID_INDICATEUR = [];
+	var info#ID_INDICATEUR = L.control({position: 'bottomright'});
+	<BOUCLE_data(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+	<BOUCLE_entete(DATA){source csv,#FICHIER}{0,1}>#SET{intitule,#VALEUR{1}}</BOUCLE_entete>
+	<BOUCLE_lignes(DATA){source csv,#FICHIER}{1,n}>filtreCommunes#ID_INDICATEUR.push("#VALEUR{0}");
+		data#ID_INDICATEUR["#VALEUR{0}"]=[(#VALEUR{1}|nettoyer_data|sinon{0})];
+		[(#COMPTEUR_BOUCLE|=={2}|oui) [(#SET{min,#VALEUR{1}|nettoyer_data|sinon{0}})] [(#SET{max,#VALEUR{1}|nettoyer_data|sinon{0}})]][(#COMPTEUR_BOUCLE|=={2}|non)	[(#VALEUR{1}|nettoyer_data|sinon{0}|<{#GET{min}}|oui)#SET{min,#VALEUR{1}|nettoyer_data|sinon{0}}]	[(#VALEUR{1}|nettoyer_data|sinon{0}|>{#GET{max}}|oui)#SET{max,#VALEUR{1}|nettoyer_data|sinon{0}}]]</BOUCLE_lignes>
+	</BOUCLE_data>
+
+	scale#ID_INDICATEUR = chroma.scale(['white',['(#GET{couleur})']]).domain([#GET{min},#GET{max}]);
+	info#ID_INDICATEUR.onAdd = function (map) {
+	    this._div = L.DomUtil.create('div', 'legend_carto p-1 neumorphic-fond-blanc neumorphic-shadow-outer-small');
+	    this._div.innerHTML = '<strong>#GET{intitule}</strong><div class="row"><div class="col-6 pr-0"><span class="d-inline-block carre mr-1"></span><span class="d-inline-block">#GET{min}</span></div><div class="col-6 pl-0"><span class="d-inline-block carre mr-1" style="background:[(#GET{couleur})];"></span><span class="d-inline-block">#GET{max}</span></div></div>';
+	    return this._div;
+	};
+	
+	var communesLayer#ID_INDICATEUR = L.geoJSON(communes, {
+		style: function (feature) {
+		   return {
+			color: scale#ID_INDICATEUR(data#ID_INDICATEUR[feature.properties.code]).css(),
+			weight: 1,
+	   		opacity: 1.0,
+			fillOpacity : 0.9,
+			};
+	     },
+		filter: function(feature, layer) {
+		   return filtreCommunes#ID_INDICATEUR.includes(feature.properties.code);
+	    	},
+	    onEachFeature: onEachFeature#ID_INDICATEUR
+	}).bindTooltip(function (layer){
+		return "<div><span class='d-block'>"+layer.feature.properties.nom+"</span><span class='font-weight-bold d-block'>"+data#ID_INDICATEUR[layer.feature.properties.code]+"</span></div>";
+	},{sticky:true});
+	function highlightFeature#ID_INDICATEUR(e) {
+	    var layer = e.target;
+
+	    layer.setStyle({
+		   color: chroma('[(#GET{couleur})]').darken().css()
+	    });
+
+	    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+		   layer.bringToFront();
+	    }
+	}
+	function resetHighlight#ID_INDICATEUR(e) {
+	    communesLayer#ID_INDICATEUR.resetStyle(e.target);
+		var layer = e.target;
+	    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+		   layer.bringToBack();
+	    }
+	}
+	function onEachFeature#ID_INDICATEUR(feature, layer) {
+	    layer.on({
+		   mouseover: highlightFeature#ID_INDICATEUR,
+		   mouseout: resetHighlight#ID_INDICATEUR
+	    });
+	}
+	
+	info#ID_INDICATEUR.addTo(map#ID_INDICATEUR);
+	communesLayer#ID_INDICATEUR.addTo(map#ID_INDICATEUR);
+	<BOUCLE_contour(DOCUMENTS){id_indicateur}{tout}{extension=json}{0,1}>
+	
+	var contour#ID_INDICATEUR = new L.GeoJSON.AJAX(
+		["(#FICHIER|url_absolue)"],
+		{style: {
+			color: chroma('[(#GET{couleur})]').darken().css(),
+			weight: 2,
+	   		opacity: 1.0,
+			fillOpacity : 0,
+			},
+		}
+	);
+	contour#ID_INDICATEUR.on('data:loaded', function(){
+		contour#ID_INDICATEUR.addTo(map#ID_INDICATEUR);
+		contour#ID_INDICATEUR.bringToFront();
+		map#ID_INDICATEUR.fitBounds(contour#ID_INDICATEUR.getBounds());
+		map#ID_INDICATEUR.invalidateSize();
+	});
+
+	</BOUCLE_contour>
+	
+	</B_contour>
+	map#ID_INDICATEUR.fitBounds(communesLayer#ID_INDICATEUR.getBounds());
+	map#ID_INDICATEUR.setZoom(map#ID_INDICATEUR.getBoundsZoom(communesLayer#ID_INDICATEUR.getBounds(),true) - 1);
+	<//B_contour>
+	map#ID_INDICATEUR.invalidateSize();
+	map#ID_INDICATEUR.on("moveend zoomend", function(){
+		leafletImage(map#ID_INDICATEUR, function(err, canvas) {
+			$('#imageDownloader#ID_INDICATEUR').attr('href', canvas.toDataURL());
+		});
+	});
+
+});
+</script>
+</BOUCLE_indicateurs>
+

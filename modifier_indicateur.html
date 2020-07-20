@@ -1,0 +1,63 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+[(#REM) Cf.: http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+]<!--[if lt IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie7"> <![endif]-->
+<!--[if IE 8 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie8"> <![endif]-->
+<!--[if IE 9 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js"> <!--<![endif]-->
+<head>
+	<script type='text/javascript'>/*<![CDATA[*/(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement);/*]]>*/</script>
+	<title><:artaclim:modifier_indicateur:> [(#NOM_SITE_SPIP|textebrut)]</title>
+	<INCLURE{fond=inclure/head} />
+</head>
+
+<body class="pas_surlignable page_sommaire">
+<div class="page">
+
+	<div class="main">
+		[(#SESSION{id_auteur}|non)<div id="boiteconnexion" class="p-3 mb-3 fondrouge"> 
+			<div class="ajax">#FORMULAIRE_CONNEXIONPUBLIC</div>
+		</div>]
+		[(#SESSION{id_auteur}|oui)
+			[(#SESSION{statut}|=={0minirezo}|oui)
+				<INCLURE{fond=inclure/navadmin,env}>
+				<div class="container">
+					<div class="row">
+						<div class="col-12 text-center">
+							<div class="row">
+								<div class="etape_modif on btn gris d-flex align-self-center col-12 col-md-8 mx-auto align-items-center">
+									<h3 class="text-uppercase mr-3 my-0"><:artaclim:modifier_indicateur:></h3>
+									<h3 class="my-0 mr-auto"> #TITRE</h3>
+									[(#CHEMIN{images/pic-validation.svg}|balise_svg)]
+								</div>
+							</div>
+							<div class="ajax">
+							#FORMULAIRE_MODIFIERINDICATEUR{#ID_INDICATEUR,#URL_PAGE{indicateurs}}
+							</div>
+							<div class="row">
+								<div class="col-12 col-md-8 mx-auto">
+								[<a class="d-block btn gris my-3" href="(#URL_PAGE{modifier_donnees}|parametre_url{id_indicateur,#ID_INDICATEUR})"><:artaclim:modifier_donnees:> ></a>]
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12 col-md-8 mx-auto">
+								[<a class="d-block btn gris my-3" href="(#URL_PAGE{modifier_parametres}|parametre_url{id_indicateur,#ID_INDICATEUR})"><:artaclim:modifier_parametres:> ></a>]
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			]
+			[(#SESSION{statut}|=={0minirezo}|non)
+				<h2 class="error"><:artaclim:erreur_autorisation:></h2>
+			]
+		]
+	</div><!--.main-->
+	
+	<INCLURE{fond=inclure/footer,self=#SELF} />
+	
+</div><!--.page-->
+</body>
+</html>
+</BOUCLE_indicateur>

@@ -1,0 +1,32 @@
+<paquet
+	prefix="artaclim"
+	categorie="divers"
+	version="0.3.8"
+	etat="dev"
+	compatibilite="[3.2.0;3.2.*]"
+	logo="prive/themes/spip/images/artaclim-48.png"
+	schema="0.3.3"
+>
+
+	<nom>Indicateurs Artaclim</nom>
+	<!-- Gestion d'indicateurs d'adaptation au changement climatique dans le cadre du projet Artaclim -->
+
+	<auteur mail="contact@outrenet.com" lien="https://outrenet.com" >Outrenet</auteur>
+
+	<pipeline nom="declarer_tables_interfaces" inclure="base/artaclim.php" />
+	<pipeline nom="declarer_tables_principales" inclure="base/artaclim.php" />
+	<pipeline nom="declarer_tables_auxiliaires" inclure="base/artaclim.php" />
+	<pipeline nom="declarer_tables_objets_surnoms" inclure="base/artaclim.php" />
+	<pipeline nom="declarer_tables_objets_sql" inclure="base/artaclim.php" />
+	<pipeline nom="autoriser" inclure="artaclim_autoriser.php" />
+	<pipeline nom="jqueryui_plugins" inclure="artaclim_pipelines.php" />
+
+
+	<chemin path="" />
+	<style source="css/bootstrap-artaclim.css" type="public" />
+	<style source="css/titatoggle-dist-min.css" type="public" />
+	<style source="css/Chart.css" type="public" />
+	<style source="css/artaclim.css" type="public" />
+
+	<utilise nom="palette"  />
+</paquet>

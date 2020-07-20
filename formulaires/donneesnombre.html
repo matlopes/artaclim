@@ -1,0 +1,38 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+
+<div class="formulaire_spip formulaire_donneesobjectif" id='formulaire_donneesobjectif-#ENV{id,new}'>
+	<span class="image_loading"></span>
+	[<div class="reponse_formulaire reponse_formulaire_ok alert alert-success">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur alert alert-danger">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data' autocomplete="off"><div>
+		#ACTION_FORMULAIRE
+		<div class="row justify-content-center">
+			<div class="col-12 ">
+				<h5><:artaclim:valeurs:></h5>
+				<div class="form-group">
+					<input type="text" class="text-left form-control[ (#ENV**{erreurs}|table_valeur{nombre}|oui)is-invalid]" name='nombre' id='objectif' value="[(#ENV**{nombre})]" placeholder="<:artaclim:nombre:>" autocapitalize="off" autocorrect="off" />
+					[<div class="invalid-feedback p-1 mt-0">
+					  (#ENV**{erreurs}|table_valeur{nombre})
+					</div>]
+				</div>
+				<div class="form-group">
+					<input type="text" class="text-left form-control[ (#ENV**{erreurs}|table_valeur{intitule}|oui)is-invalid]" name='intitule' id='intitule' value="[(#ENV**{intitule})]" placeholder="<:artaclim:intitule:>" autocapitalize="off" autocorrect="off" />
+					[<div class="invalid-feedback p-1 mt-0">
+					  (#ENV**{erreurs}|table_valeur{intitule})
+					</div>]
+				</div>
+				<p><small><:artaclim:explication_nombre:></small></p>
+			</div>
+		</div>
+		<div class="row my-4 justify-content-center">
+			<div class="col-12 mb-2">
+			 <button type="submit" class="btn  btn-outline-light" name='enregistrer' value="enregistrer"><:artaclim:valider_rester:> </button>
+			</div>
+		</div>
+
+	</div></form>
+</div>
+
+
+</BOUCLE_indicateur>

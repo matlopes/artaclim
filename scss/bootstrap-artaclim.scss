@@ -1,0 +1,75 @@
+//Personnalisations pour Bootstrap donc avant cf. https://getbootstrap.com/docs/4.4/getting-started/theming/
+
+@import "variables";
+
+$grid-breakpoints: (
+  xxxs: 0,
+  xxs: 320px,
+  xs: 568px,
+  sm: 667px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1350px,
+);
+$container-max-widths: (
+  xxxs: 0,
+  xxs: 320px,
+  xs: 568px,
+  sm: 667px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1350px,
+);
+
+$font-family-sans-serif: $police;
+
+$body-bg: $blanc-anti-eclat;
+$body-color: $charbon;
+
+$blue: $bleu-ciel;
+$gray-600: $gris-metal;
+$yellow: $carotte;
+$purple: $violet;
+$green: $vert;
+$pink: $rose-sombre;
+$gray-800: $charbon;
+
+$link-color:$bleu-ciel;
+
+$input-btn-padding-y:         .75rem ;
+$input-btn-padding-x:         1.5rem ;
+
+$h5-font-size: $font-size-base * 1.1;
+$headings-font-weight:normal;
+
+$grid-gutter-width:50px;
+
+$spacer:1rem;
+$spacers: ();
+$spacers: map-merge(
+  (
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 2),
+    5: ($spacer * 3)
+  ),
+  $spacers
+);
+
+$tooltip-font-size: 0.6rem;
+$tooltip-max-width: 100px;
+$tooltip-color: $blanc-anti-eclat;
+$tooltip-bg: $charbon;
+$tooltip-opacity: 0.8;
+$tooltip-border-radius: 7px;
+$tooltip-padding-y: 0.5rem;
+
+//On amène Bootstrap
+
+@import "../lib/bootstrap/scss/bootstrap";
+
+//Après Bootstrap

@@ -1,0 +1,132 @@
+#CACHE{24*3600}
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+
+[(#SESSION{id_auteur}|oui)
+	<div class="chart-container position-relative">
+	    <canvas id="chart#ID_INDICATEUR"></canvas>
+	</div>
+]
+	<script>
+	var ctx#ID_INDICATEUR = $('#chart#ID_INDICATEUR');
+	var $labels#ID_INDICATEUR = [];
+	var $label#ID_INDICATEUR= [];
+
+#SET{config_user,#ARRAY}
+<BOUCLE_configuser(spip_auteurs_liens){id_auteur=#SESSION{id_auteur}}{objet=indicateur}{id_objet=#ID_INDICATEUR}{0,1}>
+#SET{config_user,#CONFIG_INDICATEUR}
+</BOUCLE_configuser>
+#SET{nbjeux,0}
+#SET{moismin,12}
+#SET{moismax,01}
+#SET{min,#CONFIG_INDICATEUR|table_valeur{min}|plus{1}|sinon{1}}
+[(#CONFIG_INDICATEUR|table_valeur{max}|oui)
+	#SET{max,#CONFIG_INDICATEUR|table_valeur{max}|moins{#CONFIG_INDICATEUR|table_valeur{min}}}
+]
+[(#CONFIG_INDICATEUR|table_valeur{max}|non)
+	#SET{max,1000}
+]
+[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_bornes}|=={1}|oui)
+	[(#GET{config_user}|table_valeur{min}|oui)
+		#SET{min,#GET{config_user}|table_valeur{min}|plus{1}|sinon{1}}
+	]
+	[(#GET{config_user}|table_valeur{max}|oui)
+		#SET{max,#GET{config_user}|table_valeur{max}|moins{#GET{config_user}|table_valeur{min}}}
+	]
+]
+#SET{base,#CONFIG_INDICATEUR|table_valeur{base}|sinon{0}}
+[(#CONFIG_INDICATEUR|table_valeur{donnees_dates}|=={1}|oui)
+	#SET{base,0}
+]
+
+	<BOUCLE_data(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+	<BOUCLE_entete(DATA){source csv,#FICHIER}{0,1}>
+		[(#SET{nbjeux,#VALEUR|count|div{2}|moins{1}})]
+		<BOUCLE_jeux(DATA){enum 1,#GET{nbjeux}}>
+			$label#ID_INDICATEUR.push(["(#_entete:VALEUR{#COMPTEUR_BOUCLE}|couper{60}|textebrut)"]);
+			$data#ID_INDICATEUR#COMPTEUR_BOUCLE=new Array();
+		</BOUCLE_jeux>
+	</BOUCLE_entete>
+	<BOUCLE_lignes(DATA){source csv,#FICHIER}{#GET{min},#GET{max}}>
+		$labels#ID_INDICATEUR.push("#_lignes:VALEUR{0}");	
+		<BOUCLE_jeuxx(DATA){enum 1,#GET{nbjeux}}>
+			[(#CONFIG_INDICATEUR|table_valeur{donnees_dates}|=={1}|non)
+				[$data#ID_INDICATEUR(#COMPTEUR_BOUCLE)].push([(#_lignes:VALEUR{#COMPTEUR_BOUCLE}|nettoyer_data|moins{#GET{base}})]);
+			]
+			[(#CONFIG_INDICATEUR|table_valeur{donnees_dates}|=={1}|oui)
+				$data#ID_INDICATEUR#COMPTEUR_BOUCLE.push(moment("[(#_lignes:VALEUR{#COMPTEUR_BOUCLE}|extraire_mois)]-[(#_lignes:VALEUR{#COMPTEUR_BOUCLE}|extraire_jour)]","MM-DD"));
+				[(#GET{moismin}|>{#_lignes:VALEUR{#COMPTEUR_BOUCLE}|extraire_mois}|oui)
+					#SET{moismin,#_lignes:VALEUR{#COMPTEUR_BOUCLE}|extraire_mois}
+				]
+				[(#GET{moismax}|<{#_lignes:VALEUR{#COMPTEUR_BOUCLE}|extraire_mois}|oui)
+					#SET{moismax,#_lignes:VALEUR{#COMPTEUR_BOUCLE}|extraire_mois}
+				]
+			]
+		</BOUCLE_jeuxx>
+	</BOUCLE_lignes>
+	</BOUCLE_data>
+	 moment.locale('fr');
+	//console.log(Chart.defaults);
+	$( document ).ready(function() {
+		var myChart#ID_INDICATEUR = new Chart(ctx#ID_INDICATEUR, {
+		    type: 'radar',
+		    data: {
+			   labels: $labels#ID_INDICATEUR,
+			   datasets: [
+					<BOUCLE_jeux2(DATA){enum 1,#GET{nbjeux}}>
+					[(#SET{couleur,#CONFIG_INDICATEUR|table_valeur{couleurs/#COMPTEUR_BOUCLE}|sinon{#CONST{_COULEURS_DEFAUT}|table_valeur{#COMPTEUR_BOUCLE}}})]
+					[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_couleurs}|=={1}|oui) 
+					[(#SET{couleur,#GET{config_user}|table_valeur{couleurs/#COMPTEUR_BOUCLE}|sinon{#CONFIG_INDICATEUR|table_valeur{couleurs/#COMPTEUR_BOUCLE}}|sinon{#CONST{_COULEURS_DEFAUT}|table_valeur{#COMPTEUR_BOUCLE}}})]]
+					{
+						label: $label#ID_INDICATEUR[[(#COMPTEUR_BOUCLE|moins{1})]],
+						data: [$data(#ID_INDICATEUR)#COMPTEUR_BOUCLE],
+						borderColor: ['(#GET{couleur})'],
+						backgroundColor: [chroma('(#GET{couleur})').alpha(0.2).css()],
+						pointBackgroundColor: ['(#GET{couleur})'],
+                         	
+					},
+					</BOUCLE_jeux2>
+			   ]
+		    },
+		    options: {
+			    legend:{
+				   	labels:{
+					   [(#GET{nbjeux}|=={1}|oui)
+						boxWidth:0,
+					   ]
+					}
+				   },
+				tooltips: {
+					[(#GET{nbjeux}>{1}|non)displayColors : false,]
+					callbacks: {
+							label: function(tooltipItem, data) {
+								var label = tooltipItem.yLabel + #GET{base};
+								[(#CONFIG_INDICATEUR|table_valeur{donnees_dates}|=={1}|oui)
+								label = moment(tooltipItem.yLabel,"MMM D, YYYY, hh:mm:ss a").format("D MMM");
+								]
+								return label;
+							},
+							title : function(tooltipItem, data){
+								console.log(tooltipItem);
+								console.log(data);
+								return data.labels[tooltipItem[0].index];
+							}
+						}
+						
+				},
+				animation: {
+					onComplete: function(animation){
+						$('#imageDownloader#ID_INDICATEUR').attr('href', this.toBase64Image());
+					}
+				},
+				 scale: {
+					  ticks: {
+						 [suggestedMin: (#CONFIG_INDICATEUR|table_valeur{suggestedmin}),]
+						 [suggestedMax: (#CONFIG_INDICATEUR|table_valeur{suggestedmax}),]
+					  }
+				   }
+			}
+		});
+		});
+	</script>
+
+</BOUCLE_indicateur>

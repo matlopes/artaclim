@@ -1,0 +1,49 @@
+#CACHE{0}
+<div id="list_utilisateurs">
+	<div class="row justify-content-center">
+		<div class="col-2">
+			<span class="sort btn btn-rond" data-sort="titre"  data-toggle="tooltip" title="<:artaclim:tri_alphabetique:>">[(#CHEMIN{images/pict-az-small.svg}|balise_svg{<:artaclim:tri-alpha:>})]</span>
+		</div>
+		<div class="col-2">
+		[(#REM)<input type="text" class="search form-control form-control-sm" placeholder='Chercher'/>]
+		</div>
+		<div class="col-2 pr-5">
+		</div>
+		<div class="col-4">
+		<a class="text-decoration-none" href="#URL_ECRIRE{auteur_edit,new=oui}"> <span class=" btn btn-rond rose">[(#CHEMIN{images/pict-plus-small.svg}|balise_svg{<:artaclim:creer_utilisateur:>})]</span> <small class="ml-1 texterose"><:artaclim:creer_utilisateur:></small></a>
+		</div>
+	</div>
+	<B_users>
+	<div class="row justify-content-center mt-3">
+	<div class="col-11">
+	<ul class="list list-unstyled text-left p-2">
+	<BOUCLE_users(AUTEURS){par nom}{statut = 1comite}{tout}>
+		<li class="row mx-1 py-1">
+			<span class="titre col-4">#NOM</span>
+			<span class="col actions text-right">
+				<a href="#URL_ECRIRE{auteur,id_auteur=#ID_AUTEUR}" class="pr-2">[(#CHEMIN{images/pict-utilisateurs-small.svg}|balise_svg{<:artaclim:attribuer_indicateurs:>})]<:artaclim:modifier_auteur:></a>
+				[<a href="(#URL_PAGE{attribuer_indicateurs,id_auteur=#ID_AUTEUR})">[(#CHEMIN{images/pict-graph-barre-small.svg}|balise_svg{<:artaclim:attribuer_indicateurs:>})]<:artaclim:attribuer_indicateurs:></a>]
+			</span>
+[(#REM)			<span class="col-1">[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_SANS_DATA}}|non)[<a href="(#URL_PAGE{donnees_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})">données</a>]]</span>
+			<span class="col-1">[<a href="(#URL_PAGE{parametrer_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})">paramétrage</a>]</span>]
+		</li>
+	</BOUCLE_users>
+	<ul>
+	</div>
+	</div>
+	</B_users>
+
+</div>
+
+<div class="my-4">
+		<a class="text-decoration-none" href="#URL_ECRIRE{auteur_edit,new=oui}"><small class="d-block my-1 texterose"><:artaclim:creer_utilisateur:></small> <span class=" btn btn-rond rose">[(#CHEMIN{images/pict-plus-small.svg}|balise_svg{<:artaclim:creer_utilisateur:>})]</span> </a>
+</div>
+<script>
+	var options = {
+	    valueNames: [ 
+		'titre'
+		]
+	};
+
+	var $indicList = new List('list_utilisateurs', options);
+</script>

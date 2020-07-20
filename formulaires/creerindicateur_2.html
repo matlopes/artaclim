@@ -1,0 +1,86 @@
+<div class="formulaire_spip formulaire_creerindicateur formulaire_#FORM text-left">
+<form action='#ENV{action}' method='post'>
+	#ACTION_FORMULAIRE
+	<div class="row my-4 justify-content-center">
+	<div class="col-sm-10 col-lg-8">
+
+	<div class="row">
+		<div class="col-12 mb-3">
+			<label for="titre"><:artaclim:titre:> (obligatoire)</label>
+			<input class="form-control text" type="text" name="titre" value="#ENV{titre}" placeholder="Titre" />
+			[<p class="invalid-feedback">(#ENV{erreurs}|table_valeur{titre})</p>]
+		</div>
+		<div class="col-6 mb-3">
+			<div class="input-group">
+			   <div class="input-group-prepend">
+				<div class="input-group-text">[(#CHEMIN{images/pict-source-small.svg}|image_reduire{20}) ]</div>
+			   </div>
+			   <input  class="form-control text" type="text" name="source" value="#ENV{source}" placeholder="Source"  />
+			 </div>
+		</div>
+		<div class="col-6 mb-3">
+			<div class="input-group">
+			   <div class="input-group-prepend">
+				<div class="input-group-text">[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ]</div>
+			   </div>
+			   <input  class="form-control text" type="text" name="lieu" value="#ENV{lieu}" placeholder="Lieu" />
+			 </div>
+		</div>
+		<div class="col-6 mb-3">
+			<div class="form-group">
+				<label for="descriptif"><:artaclim:descriptif:></label>
+				<textarea class="form-control" id="descriptif"  name="descriptif" placeholder="Descriptif" />#ENV{descriptif}</textarea>
+			</div>
+		</div>
+		<div class="col-6 mb-3">
+			<div class="form-group">
+				<label for="interpretation"><:artaclim:interpretation:></label>
+				<textarea class="form-control" id="interpretation" name="interpretation" placeholder="Interprétation" />#ENV{interpretation}</textarea>
+			</div>
+		</div>
+		<div class="col-8 mb-4">
+			<h6 class="font-weight-bold"><:artaclim:thematiques:></h6>
+			<div class="row">
+			<BOUCLE_thematiques(MOTS){id_groupe=1}>
+				<div class="col-sm-6 col-lg-4">
+				<div class="form-check  form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="thematiques#ID_MOT" name="thematiques[#ID_MOT]" value="1" [(#ENV{thematiques}|table_valeur{#ID_MOT}|=={1}|oui) checked]>
+				  <label class="form-check-label" for="thematiques#ID_MOT">
+				    #TITRE
+				  </label>
+				</div>
+				</div>
+			</BOUCLE_thematiques>
+			</div>
+		</div>
+		<div class="col-4 ">
+			<B_usages>
+			<h6 class="font-weight-bold">#INFO_TITRE{groupe_mot,2}</h6>
+			<div class="text-left mb-3">
+			<BOUCLE_usages(MOTS){id_groupe=2}>
+				<div class="form-check pl-0">
+				  <input class="form-check-input" type="radio" name="usage" id="usage#ID_MOT" value="#ID_MOT" [(#ENV**{usage}|=={#ID_MOT}|oui)checked]>
+				  <label class="form-check-label" for="usage#ID_MOT">
+				    #TITRE
+				  </label>
+				</div>
+			</BOUCLE_usages>
+			</div>
+		</div>
+
+	<div class="col-12 row justify-content-between">
+		<div class="col-12 col-md-2">
+			<input type="submit" class="btn gris" name="_retour_etape_1" value="< Retour" />
+		</div>
+		<div class="col">
+		<small><:artaclim:explications_creation_indicateur:></small>
+		</div>
+		<div class="col-12 col-md-3">
+			<input class="btn rose" type='submit' name='ok' value='<:artaclim:creer_indicateur:>' />
+		</div>
+	</div>
+	</div>
+	
+	</div>
+</form>
+</div>

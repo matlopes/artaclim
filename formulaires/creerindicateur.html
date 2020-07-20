@@ -1,0 +1,19 @@
+<div class="formulaire_spip formulaire_#FORM">
+<form action='#ENV{action}' method='post'>
+	#ACTION_FORMULAIRE
+	<div class="row my-4 justify-content-center">
+	<B_types>
+	<div class="col-sm-10 col-md-6 col-xl-4 col-xxl-3">
+	<select name="type" class="custom-select form-control-sm">
+	<BOUCLE_types(spip_types_indicateurs){par id_type_indicateur}>
+[		<option value="(#ID_TYPE_INDICATEUR)" [(#ENV**{type}|=={#ID_TYPE_INDICATEUR}|oui) selected]>#TITRE</option>]
+	</BOUCLE_types>
+	</select>
+	[(#ENV**{erreurs}|table_valeur{type})]
+	</div>
+	</B_types>
+	</div>
+	<input class='btn gris' type='submit' name='ok' value='<:artaclim:suivant:>' />
+
+</form>
+</div>

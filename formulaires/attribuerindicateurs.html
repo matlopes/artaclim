@@ -1,0 +1,135 @@
+<BOUCLE_utilisateur(AUTEURS){id_auteur=#ENV{id_auteur}}{tout}>
+
+<div class='formulaire_spip formulaire_attribuerindicateurs' id='formulaire_attribuerindicateurs-#ENV{id,new}'>
+
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+		<select id="indicateurs" class="d-none" name="indicateurs[]" multiple>
+			<BOUCLE_indicateurs(INDICATEURS)>
+				<option data-indicateur='indicateur#ID_INDICATEUR' value="#ID_INDICATEUR" [(#ID_INDICATEUR|in_array{#ENV{indicateurs}}|oui) selected]>#TITRE - #SOURCE - #LIEU</option>
+			</BOUCLE_indicateurs>
+		</select>
+		<div class="row">
+			<div class="col-6" id="list_biblio">
+				<h5 class="text-center  text-uppercase"><:artaclim:indicateurs_disponibles:></h5>
+				<div class="row justify-content-center">
+					<div class="col-3">
+						<span class="sort btn btn-rond" data-sort="titre">[(#CHEMIN{images/pict-az-small.svg}|balise_svg{<:artaclim:tri-alpha:>})]</span>
+						<span class="sort btn btn-rond" data-sort="date">[(#CHEMIN{images/pict-dates-small.svg}|balise_svg{<:artaclim:tri_date:>})]</span>
+					</div>
+					<div class="col">
+						<input type="text" class="search form-control form-control-sm" placeholder='Chercher'/>
+					</div>
+					<div class="col-5">
+						<select class="filter custom-select form-control-sm">
+							<option value="*"><:artaclim:toutes_thematiques:></option>
+							<BOUCLE_mots(MOTS){id_groupe=1}>
+							<option value="mot#ID_MOT">#TITRE</option>
+							</BOUCLE_mots>
+						</select>
+					</div>
+				</div>
+
+				<ul class="list list-unstyled mt-3 p-2">
+				<BOUCLE_biblio(INDICATEURS){!id_indicateur IN #ENV{indicateurs}}>
+					<li id="indicateur#ID_INDICATEUR" [data-date="(#DATE|affdate{'Y-m-d'})"]  class="row mx-1 py-1 indicateur tags date  <BOUCLE_tags(MOTS){id_indicateur}> mot#ID_MOT</BOUCLE_tags>">
+						<div class="col-1 remove font-weight-bold">
+						<a href="#" class="">-</a>
+						</div>
+						<span class="col titre">#TITRE</span>
+						<small class="lieu col-3 d-flex">[[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ] (#LIEU)]</small>
+						<div class="col-2 voir">
+						[<a [href="(#URL_PAGE{modifier_parametres}|parametre_url{id_indicateur,#ID_INDICATEUR})"] target="_blank"  class="d-flex">(#CHEMIN{images/pict-voir-small.svg}|image_reduire{20})</a>]
+						</div>
+						<div class="col-1 add font-weight-bold">
+						<a href="#" class="">+</a>
+						</div>
+					</li>
+				</BOUCLE_biblio>
+				</ul>
+			</div>
+			<div class="col-6" >
+				<h5 class="text-center text-uppercase"><:artaclim:indicateurs_selectionnes:></h5>
+				<div class="text-right">
+					[(#REM)<div class="alert alert-info mb-0"><small ><:artaclim:explication_attribuer_indicateurs:></small></div>]
+					<button type="submit" class="btn violet ml-2" name="retourindicateurs" value="retourindicateurs"><:artaclim:valider_listeauteurs:> </button>
+				</div>
+				<div id="list_selected" class="mt-2">
+				<ul class="list list-unstyled p-2">
+				<BOUCLE_selected(INDICATEURS){id_indicateur IN #ENV{indicateurs}}>
+					<li id="indicateur#ID_INDICATEUR" [data-date="(#DATE|affdate{'Y-m-d'})"]  class="row mx-1 py-1 indicateur tags date  <BOUCLE_tags2(MOTS){id_indicateur}> mot#ID_MOT</BOUCLE_tags2>">
+						<div class="col-1 remove font-weight-bold">
+						<a href="#" class="">-</a>
+						</div>
+						<span class="col titre">#TITRE</span>
+						<small class="lieu col-3 d-flex">[[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ] (#LIEU)]</small>
+						<div class="col-2 voir">
+						[<a [href="(#URL_PAGE{modifier_parametres}|parametre_url{id_indicateur,#ID_INDICATEUR})"] target="_blank" class="d-flex">(#CHEMIN{images/pict-voir-small.svg}|image_reduire{20})</a>]
+						</div>
+						<div class="col-1 add font-weight-bold">
+						<a href="#" class="">+</a>
+						</div>
+					</li>
+				</BOUCLE_selected>
+				</ul>
+				</div>
+			</div>
+			<div class="col-12 my-3 text-center">
+				<button type="submit" class="btn violet" name="retourindicateurs" value="retourindicateurs"><:artaclim:valider_listeauteurs:> </button>
+			</div>
+		</div>
+
+		
+		<script>
+		var options = {
+		    valueNames: [ 
+			'titre',
+			'lieu',
+			{ name: 'date', attr: 'data-date' },
+			{ name: 'tags', attr: 'data-tags' }
+			]
+		};
+
+		var $biblioList = new List('list_biblio', options);
+		var $selectedList = new List('list_select', options);
+
+		$('.add').click(function(){
+			var indicateur=$(this).parent();
+			$('#list_selected .list').prepend(indicateur);
+			$biblioList.reIndex();
+			//$selectedList.reIndex();
+			$("[data-indicateur='"+indicateur.attr('id')+"'").prop('selected', true);
+		});
+		$('.remove').click(function(){
+			var indicateur=$(this).parent();
+			$('#list_biblio .list').prepend(indicateur);
+			$biblioList.reIndex();
+			//$selectedList.reIndex();
+			$("[data-indicateur='"+indicateur.attr('id')+"'").prop('selected', false);
+		});
+
+		$('.filter').change(function(){
+		  var $q = $(this).val();
+		  if($q=="*"){
+		    $biblioList.filter();
+		  } else {
+			$biblioList.filter(function(item) {
+				return item.elm.classList.contains($q);
+		    });
+			
+		  }
+		});
+
+
+		</script>
+
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_utilisateur>

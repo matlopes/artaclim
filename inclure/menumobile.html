@@ -1,0 +1,22 @@
+<div class="menumobile d-block d-lg-none d-print-none navbar navbar-light bg-light">
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobileNav" aria-controls="mobileNav" aria-expanded="false" aria-label="Menu">
+	<span class="navbar-toggler-icon"></span>
+</button>
+<a class="btn btn-rond gris d-block float-right" href="#URL_LOGOUT{#URL_SITE_SPIP}" data-toggle="tooltip" title="<:icone_deconnecter:>">[(#CHEMIN{images/pict-deconnexion-small.svg}|balise_svg{<:icone_deconnecter:>})]</a>
+<div class="collapse navbar-collapse mt-2" id="mobileNav">
+<ul class="navbar-nav p-2">
+	<li class="nav-item [(#ENV{home}|=={oui}|oui)active]">
+		<a href="#URL_SITE_SPIP" class="tableau d-block nav-link py-1" >
+			<div class="d-inline-flex align-items-center "><span class="logo text-center mr-2">[(#CHEMIN{images/img-tableau-bord.svg}|balise_svg)]</span><span class="label"><:artaclim:tableau_de_bord:></span></div>
+		</a>
+	</li>
+	<BOUCLE_menu(MOTS){id_groupe=1}>
+	<li class="nav-item [(#ENV{id_mot}|=={#ID_MOT}|oui)active]">
+		<a [href="(#URL_MOT)"] class="[(#EXPOSE)] d-block py-1">
+			<div class="d-inline-flex align-items-center"><span class="logo text-center  mr-2">[(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg)]</span><span class="label">#TITRE</span></div>
+		</a>
+	</li>
+	</BOUCLE_menu>
+</div>
+
+</div>

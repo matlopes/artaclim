@@ -1,0 +1,58 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+
+<div class="formulaire_spip formulaire_chargerdonnees text-left" id='formulaire_chargerdonnees-#ENV{id,new}'>
+	<span class="image_loading"></span>
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+		[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_couleurs}|oui)
+		<div class="row">
+			<div class="col-12 col-lg-6" id="couleurs">
+				<h5><:artaclim:couleur:></h5>
+				<div class="d-flex align-items-center mb-2">
+					<input type="text" id="couleur" name="couleur" class="palette mr-2" [value="(#ENV{couleur})"] />
+					<small><:artaclim:couleur_nombre:></small>
+				</div>
+			</div>
+
+		</div>]
+		<B_fichiers>
+		<div class="row">
+			<div class="col-12 my-4">
+				<h5><:artaclim:picto:></h5>
+				<input type="hidden" name="picto" id="picto" value="#ENV{picto}">
+				<div class="choix_picto row">
+				<BOUCLE_fichiers(DATA){si #CONFIG_INDICATEUR|table_valeur{autoriser_modifier_picto}|=={1}}{source ls, #CHEMIN{representations/pictos_nombre}/*.svg}>
+					<div class="col-2 item_picto text-center [(#ENV{picto}|non) [(#COMPTEUR_BOUCLE|=={1}|oui) selected]] [(#ENV{picto}|=={#VALEUR|table_valeur{basename}}|oui) selected]" [data-picto="(#VALEUR|table_valeur{basename})"]>[(#FILE|balise_svg)]</div>
+				</BOUCLE_fichiers>
+				</div>
+			</div>
+		</div>
+		</B_fichiers>
+		<div class="row my-4 justify-content-center">
+			<div class="col-12 col-lg-6 text-center">
+				<small><:artaclim:info_enregistrement:></small>
+			</div>
+		</div>
+		<div class="row mb-4 justify-content-center text-center">
+			<div class="col-12 col-md-6 mb-2">
+			 <button type="submit" class="btn  btn-outline-light" name='sauvegarder' value="sauvegarder">[(#CHEMIN{images/pict-enregistrer.svg}|balise_svg) ] <:artaclim:sauvegarder:> </button>
+			</div>
+		</div>
+	</div></form>
+</div>
+[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_picto}|oui)
+<script>
+$(function() {
+  $('#picto').val($('.item_picto').attr('data-picto'));
+});
+$('.item_picto').on('click',function(){
+	$('.item_picto').removeClass('selected');
+	$('#picto').val($(this).attr('data-picto'));
+	$(this).addClass('selected');
+});
+</script>
+]
+</BOUCLE_indicateur>

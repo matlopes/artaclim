@@ -1,0 +1,77 @@
+#CACHE{0}
+<div id="list_indicateurs">
+	<div class="row justify-content-center">
+		<div class="col-2">
+			<span class="sort btn btn-rond" data-sort="titre" data-toggle="tooltip" title="<:artaclim:tri_alphabetique:>">[(#CHEMIN{images/pict-az-small.svg}|balise_svg{<:artaclim:tri-alpha:>})]</span>
+			<span class="sort btn btn-rond" data-sort="date" data-toggle="tooltip" title="<:artaclim:tri_date:>">[(#CHEMIN{images/pict-dates-small.svg}|balise_svg{<:artaclim:tri_date:>})]</span>
+		</div>
+		<div class="col-2">
+		<input type="text" class="search form-control form-control-sm" placeholder='Chercher'/>
+		</div>
+		<div class="col-3 pr-5">
+		<select class="filter custom-select form-control-sm">
+			<option value="*"><:artaclim:toutes_thematiques:></option>
+			<BOUCLE_mots(MOTS){id_groupe=1}>
+				<option value="mot#ID_MOT">#TITRE</option>
+			</BOUCLE_mots>
+		</select>
+		</div>
+		<div class="col-3">
+		<a class="text-decoration-none" href="#URL_PAGE{creer_indicateur}"> <span class=" btn btn-rond rose">[(#CHEMIN{images/pict-plus-small.svg}|balise_svg{<:artaclim:creer_indicateur:>})]</span> <small class="ml-1 texterose"><:artaclim:creer_indicateur:></small></a>
+		</div>
+	</div>
+	<B_indicateurs>
+	<div class="row justify-content-center mt-3">
+	<div class="col-11">
+	<ul class="list list-unstyled text-left p-2">
+	<BOUCLE_indicateurs(INDICATEURS){!par date}>
+		<li class='row mx-1 py-1 <BOUCLE_tags(MOTS){id_indicateur}> mot#ID_MOT</BOUCLE_tags>'>
+			<span class="date d-none" aria-hidden="true">#DATE</span>
+			<span class="titre col-4">#TITRE</span>
+			<small class="lieu col-3">[[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ] (#LIEU)]</small>
+			<small class="source col-3">[[(#CHEMIN{images/pict-source-small.svg}|image_reduire{20}) ] (#SOURCE)]</small>
+			<span class="col actions text-right">
+				[<a [href="(#URL_PAGE{modifier_parametres}|parametre_url{id_indicateur,#ID_INDICATEUR})"] >(#CHEMIN{images/pict-voir-small.svg}|balise_svg{<:artaclim:apercu:>})</a>]
+				[<a href="(#URL_PAGE{modifier_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})">[(#CHEMIN{images/pict-param-small.svg}|balise_svg{<:artaclim:modifier_indicateur:>})]</a>]
+				<a class="suppr" onclick="return confirm('<:artaclim:confirmer_suppression:> [(#TITRE|attribut_html)]');" href="#URL_ACTION_AUTEUR{supprimer_indicateur,#ID_INDICATEUR-suppr,#SELF}">[(#CHEMIN{images/pict-corbeille-small.svg}|balise_svg{<:artaclim:supprimer:>})]</a>
+			</span>
+[(#REM)			<span class="col-1">[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_SANS_DATA}}|non)[<a href="(#URL_PAGE{donnees_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})">données</a>]]</span>
+			<span class="col-1">[<a href="(#URL_PAGE{parametrer_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})">paramétrage</a>]</span>]
+		</li>
+	</BOUCLE_indicateurs>
+	<ul>
+	</div>
+	</div>
+	</B_indicateurs>
+
+</div>
+
+<div class="my-4">
+<a class="text-decoration-none" href="#URL_PAGE{creer_indicateur}"> <small class="d-block my-1  texterose"><:artaclim:creer_indicateur:></small><span class=" btn btn-rond rose">[(#CHEMIN{images/pict-plus-small.svg}|balise_svg{<:artaclim:creer_indicateur:>})]</span></a>
+</div>
+<script>
+		var options = {
+		    valueNames: [ 
+			'titre', 
+			'date',
+			'lieu',
+			'source'
+			]
+		};
+
+		var $indicList = new List('list_indicateurs', options);
+
+		$('.filter').change(function(){
+		  var $q = $(this).val();		  
+		  if($q=="*"){
+		    $indicList.filter();
+		  } else {
+			$indicList.filter(function(item) {
+				return item.elm.classList.contains($q);
+		    });
+			
+		  }
+		});
+
+
+		</script>

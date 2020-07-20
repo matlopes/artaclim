@@ -1,0 +1,48 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+[(#REM) Cf.: http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+]<!--[if lt IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie7"> <![endif]-->
+<!--[if IE 8 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie8"> <![endif]-->
+<!--[if IE 9 ]> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html dir="#LANG_DIR" lang="#LANG" xmlns="http://www.w3.org/1999/xhtml" xml:lang="#LANG" class="[(#LANG_DIR)][ (#LANG)] no-js"> <!--<![endif]-->
+<head>
+	<script type='text/javascript'>/*<![CDATA[*/(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement);/*]]>*/</script>
+	<title>#TITRE [- (#NOM_SITE_SPIP|textebrut)]</title>
+	[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
+	<INCLURE{fond=inclure/head} />
+</head>
+
+<body class="pas_surlignable page_indicateur">
+
+	<div class="main">
+		[(#SESSION{id_auteur}|non)
+			<div class="ajax">#FORMULAIRE_CONNEXIONPUBLIC</div>
+		]
+		[(#SESSION{id_auteur}|oui)
+			<INCLURE{fond=inclure/menumobile}>
+			<div id="nav-utilisateur" class="nav-artaclim text-right pr-lg-5 py-1  mr-5 d-none d-lg-block d-print-none">
+				<a class="btn btn-rond float-left ml-3" href="javascript:history.back()" data-toggle="tooltip" onclick="history.back();" title="<:artaclim:retour:>">[(#CHEMIN{images/pict-back.svg}|balise_svg{<:artaclim:retour:>})]</a>
+				[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_EXPORTABLES}}|oui)<a href="#" id="imageDownloader#ID_INDICATEUR" download="indicateur#ID_INDICATEUR-large.png" target="_blank" data-toggle="tooltip" title="<:artaclim:exporter_image:>" class="d-none d-md-inline-block btn btn-rond">[(#CHEMIN{images/pict-export-image.svg}|balise_svg)]</a>]]
+				<BOUCLE_donnees(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+[(#SESSION{id_auteur}|oui)[(#CONFIG_INDICATEUR|table_valeur{autoriser_telecharger_donnees}|=={1}|oui)<a href="#FICHIER" download target='_blank' data-toggle="tooltip" title="<:artaclim:telecharger_donnees:>" class="btn btn-rond">[(#CHEMIN{images/pict-import.svg}|balise_svg)]</a>]]
+				</BOUCLE_donnees>
+				<a class="btn btn-rond" href="#" data-toggle="tooltip" onclick="window.print();" title="<:artaclim:imprimer:>">[(#CHEMIN{images/pic-print.svg}|balise_svg{<:artaclim:imprimer:>})]</a>
+[(#SESSION{id_auteur}|oui)<a class="btn btn-rond jaune" href="#" data-toggle="tooltip" title="<:artaclim:guide_utilisateur:>">[(#CHEMIN{images/pict-guide-small.svg}|balise_svg{<:artaclim:guide_utilisateur:>})]</a>
+				<a class="btn btn-rond gris" href="#URL_LOGOUT{#URL_SITE_SPIP}" data-toggle="tooltip" title="<:icone_deconnecter:>">[(#CHEMIN{images/pict-deconnexion-small.svg}|balise_svg{<:icone_deconnecter:>})]</a>
+			</div>
+			<hr class="separateur1 mt-0 mb-3" />
+			<INCLURE{fond=inclure/indicateur,id_indicateur=#ID_INDICATEUR,env}>
+			<div class="fixed-top rightnav pl-4  d-none d-lg-block d-print-none">
+				<INCLURE{fond=inclure/aide,id_article=4}>
+				<INCLURE{fond=inclure/menunav}>
+			</div>			
+		]
+	</div><!--.main-->
+	
+	<INCLURE{fond=inclure/footer,self=#SELF} />
+	
+
+</body>
+</html>
+</BOUCLE_indicateur>

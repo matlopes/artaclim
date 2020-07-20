@@ -1,0 +1,5 @@
+<form action="#ENV{action}" id="formepingler#ENV{id_indicateur}" method="post">
+#ACTION_FORMULAIRE
+<input type='hidden' class="d-none" name="choisi_tableau" [value="(#ENV{choisi_tableau}|=={non}|?{oui,non})"] />
+<a href="#" class="bouton-epingler p-1 pt-2 d-block [ (#ENV{choisi_tableau}) ] prem"  data-toggle="tooltip" data-placement="left" [title="(#ENV{choisi_tableau}|=={non}|?{<:artaclim:epingler:>,<:artaclim:desepingler:>})"]>[(#CHEMIN{images/pict-pin.svg}|balise_svg)]</a>
+</form>

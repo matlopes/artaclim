@@ -1,0 +1,65 @@
+<div class="footer clearfix mt-5  d-print-none">
+<div class="container">
+		<hr class="separateur1 mt-5 mb-4" />
+	<div class="row">
+		<div class="col">
+			[(#CHEMIN{images/assistant-footer.svg}|balise_img|inserer_attribut{class,img-fluid})]
+		</div>
+	</div>
+</div>
+<div class="container mt-4 pb-5">
+	<div class="row justify-content-center">
+		<div class="col-sm-12 col-md-6 col-xl-5 col-xxl-4">
+			[(#CHEMIN{images/logos-footer.png}|balise_img|inserer_attribut{class,img-fluid})]
+		</div>
+		<div class="col-sm-12 col-md-6 col-xl-5 col-xxl-4  d-print-none">
+			<small>
+				#DESCRIPTIF_SITE_SPIP
+
+				<a href="#URL_PAGE{mentions}" rel="">#INFO_TITRE{article,2}</a>
+			</small>
+		</div>
+	</div>
+</div>
+[<script src="(#CHEMIN{js/bootstrap.bundle.min.js})" type="text/javascript"></script>]
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip({trigger : 'hover'});
+})
+$('[data-toggle="tooltip"]').on('click', function () {
+    $(this).tooltip('hide');
+})
+$(function() {
+	$('.counter').each(function() {
+	  var $this = $(this),
+		 countTo = $this.attr('data-count');
+	  
+	  $({ countNum: $this.text()}).animate({
+	    countNum: countTo
+	  },
+
+	  {
+
+	    duration: 1500,
+	    easing:'swing',
+	    step: function() {
+		 $this.text(Math.floor(this.countNum));
+	    },
+	    complete: function() {
+		 $this.text(this.countNum);
+		 //alert('finished');
+	    }
+
+	  });  
+	});
+});
+$('.palette').each( function( i, elem ) {
+  var hueb = new Huebee( elem, {
+	customColors: [ <BOUCLE_couleurs(DATA){source tableau,#CONST{_PALETTE}}>'#VALEUR',</BOUCLE_couleurs> ],
+	shades: 0,
+	hues:8,
+  });
+});
+</script>
+
+</div>

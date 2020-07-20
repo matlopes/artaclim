@@ -1,0 +1,37 @@
+<script>
+$(document).on('click','.bouton-epingler',function(){
+	$(this).tooltip('hide');
+	$(this).tooltip('disable');
+	$(this).parent().submit();
+});
+$(document).on('mouseover','.bouton-epingler',function(){
+	$(this).tooltip('enable');
+});
+
+$(document).mouseup(e => {
+   if (!$('.autres-actions').is(e.target) // if the target of the click isn't the container...
+   && $('.autres-actions').has(e.target).length === 0) // ... nor a descendant of the container
+   {
+	$('.autres-actions').children('div').hide(300,'linear');
+  }
+ });
+$('.autres-actions').on('click', function(){
+  $(this).children('div').show(400,'swing');
+});
+
+$(document).on('click','.export-chart',function(){
+	alert($(this).attr('data_idindicateur'));
+	return false;
+});
+$(".trigger-info").hover(function () {
+//    $(this).children('div').show(400,'swing');
+	$(this).closest('.box-indicateur').find('.box-info').fadeIn();
+	$(this).closest('.box-indicateur').find('.leaflet-control-container').hide(0);
+}, 
+function () {
+//    $(this).children('div').hide(100,'swing');
+	$(this).closest('.box-indicateur').find('.box-info').fadeOut();
+	$(this).closest('.box-indicateur').find('.leaflet-control-container').show(0);
+});
+
+</script>

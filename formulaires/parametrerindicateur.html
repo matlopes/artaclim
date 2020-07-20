@@ -1,0 +1,229 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+
+<div class="formulaire_spip formulaire_chargerdonnees text-left" id='formulaire_chargerdonnees-#ENV{id,new}'>
+	<span class="image_loading"></span>
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+#SET{nbjeux,0}
+#SET{cles,#ARRAY}
+#SET{intitules,#ARRAY}
+<BOUCLE_data(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+		<script>
+		var keys = [];
+		<BOUCLE_entete(DATA){source csv,#FICHIER}>
+		[(#COMPTEUR_BOUCLE|=={1}|oui)	
+			[(#SET{nbjeux,#VALEUR|count|div{2}|moins{1}})]
+			[(#SET{intitules,#VALEUR|array_slice{1,#GET{nbjeux}}})]
+		]
+		[(#COMPTEUR_BOUCLE|=={1}|non)	#SET{cles, #GET{cles}|push{#VALEUR{0}}}
+keys.push("#VALEUR{0}");]</BOUCLE_entete>
+		</script>
+		
+		[(#_indicateur:ID_TYPE_INDICATEUR|=={1}|oui)
+			[(#GET{nbjeux}|>{1}|oui) #SET{nbjeux,1} 
+				<p class='alert alert-info my-4'><:artaclim:erreur_donnees_multiple_sursimple:></p>
+			]
+		]
+		<div class="row">
+			[(#_indicateur:ID_TYPE_INDICATEUR|=={3}|non)
+			<div class="col-12 col-lg-4 mb-3">
+				<h5><:artaclim:representation:></h5>
+				<div class="text-left">
+					<div class="form-check checkbox-slider--b mt-3">
+						<label  class='nofx d-flex' for="donnees_dates">
+							<input type="checkbox" class="checkbox" name="donnees_dates" id="donnees_dates" value="1" [(#ENV**{donnees_dates}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:donnees_dates:></small></span>
+						</label>
+					</div>
+					<div class="form-check pl-0 d-inline-block">
+					  <input class="form-check-input representation" type="radio" name="type_graphique" id="line_type" value="line" [(#ENV**{type_graphique}|=={line}|oui)checked]>
+					  <label class="form-check-label btn btn-rond" for="line_type">
+					    [(#CHEMIN{images/pict-graph-courbe-small.svg}|balise_svg)]
+					  </label>
+					</div>
+					<div class="form-check pl-0 d-inline-block">
+					  <input class="form-check-input representation" type="radio" name="type_graphique" id="bar_type" value="bar" [(#ENV**{type_graphique}|=={bar}|oui)checked]>
+					  <label class="form-check-label btn btn-rond" for="bar_type">
+					    [(#CHEMIN{images/pict-graph-barre-small.svg}|balise_svg)]
+					  </label>
+					</div>
+					<div class="form-check pl-0 d-inline-block">
+					  <input class="form-check-input representation" type="radio" name="type_graphique" id="radar_type" value="radar" [(#ENV**{type_graphique}|=={radar}|oui)checked]>
+					  <label class="form-check-label btn btn-rond" for="radar_type">
+					    [(#CHEMIN{images/pict-radar.svg}|balise_svg)]
+					  </label>
+					</div>
+					<div class="form-check checkbox-slider--b mt-3">
+						<label  class='nofx d-flex' for="autoriser_modifier_type_graphique">
+							<input type="checkbox" class="checkbox" name="autoriser_modifier_type_graphique" id="autoriser_modifier_type_graphique" value="1" [(#ENV**{autoriser_modifier_type_graphique}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_type_graphique:></small></span>
+						</label>
+					</div>
+					<div class="form-check checkbox-slider--b mt-3">
+						<label  class='nofx d-flex' for="empiler">
+							<input type="checkbox" class="checkbox" name="empiler" id="empiler" value="1" [(#ENV**{empiler}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:empiler:></small></span>
+						</label>
+					</div>
+				</div>
+			</div>]
+			<div class="col-12 col-lg-4 mb-3">
+				<h5><:artaclim:base_seuil:></h5>
+				<div class="form-group">
+					<input type="text" class="form-control[ (#ENV**{erreurs}|table_valeur{base}|oui)is-invalid]" name='base' id='base' value="[(#ENV**{base})]" placeholder="<:artaclim:base:>" autocapitalize="off" autocorrect="off" />
+					[<div class="invalid-feedback p-1 mt-0">
+					  (#ENV**{erreurs}|table_valeur{base})
+					</div>]
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control[ (#ENV**{erreurs}|table_valeur{seuil}|oui)is-invalid]" name='seuil' id='seuil' value="[(#ENV**{seuil})]" placeholder="<:artaclim:seuil:>" autocapitalize="off" autocorrect="off" />
+					[<div class="invalid-feedback p-1 mt-0">
+					  (#ENV**{erreurs}|table_valeur{seuil})
+					</div>]
+				</div>
+				<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+					<label  class='nofx d-flex' for="autoriser_modifier_base">
+						<input type="checkbox" class="checkbox" name="autoriser_modifier_base" id="autoriser_modifier_base" value="1" [(#ENV**{autoriser_modifier_base}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_base:></small></span>
+					</label>
+				</div>
+				<p><small><:artaclim:explication_base_dates:></small></p>
+			</div>
+			<div class="col-12 col-lg-4 mb-3">
+				<h5><:artaclim:correction_axey:></h5>
+				<div class="form-group">
+					<input type="text" class="form-control[ (#ENV**{erreurs}|table_valeur{suggestedmin}|oui)is-invalid]" name='suggestedmin' id='suggestedmin' value="[(#ENV**{suggestedmin})]" placeholder="<:artaclim:suggestedmin:>" autocapitalize="off" autocorrect="off" />
+					[<div class="invalid-feedback p-1 mt-0">
+					  (#ENV**{erreurs}|table_valeur{suggestedmin})
+					</div>]
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control[ (#ENV**{erreurs}|table_valeur{suggestedmax}|oui)is-invalid]" name='suggestedmax' id='suggestedmax' value="[(#ENV**{suggestedmax})]" placeholder="<:artaclim:suggestedmax:>" autocapitalize="off" autocorrect="off" />
+					[<div class="invalid-feedback p-1 mt-0">
+					  (#ENV**{erreurs}|table_valeur{suggestedmax})
+					</div>]
+				</div>
+				<p><small><:artaclim:explication_suggested:></small></p>
+			</div>
+			[(#_indicateur:ID_TYPE_INDICATEUR|=={3}|oui)
+			<div class="col-12 col-lg-4 mb-3">
+				<h5><:artaclim:empilement:></h5>
+				<div class="form-check checkbox-slider--b mt-3">
+					<label  class='nofx d-flex' for="empiler">
+						<input type="checkbox" class="checkbox" name="empiler" id="empiler" value="1" [(#ENV**{empiler}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:empiler:></small></span>
+					</label>
+				</div>
+			</div>
+			]
+			<div class="col-12 col-lg-4 mb-3" id="couleurs">
+				<h5><:artaclim:couleurs:></h5>
+				<div class="">
+					<BOUCLE_jeux(DATA){enum 1,#GET{nbjeux}}>
+						<h6 class="text-left">[(#GET{intitules}|table_valeur{#COMPTEUR_BOUCLE|moins{1}})]</h6>
+						<div class="d-flex align-items-center mb-2">
+							<input type="text" id="couleurs#VALEUR" name="couleurs[#VALEUR]" class="palette mr-1" [value="(#ENV{couleurs}|table_valeur{#VALEUR})"] />
+							<small><:artaclim:couleur:></small>
+							<input type="text" id="couleurs_sous_base#VALEUR" name="couleurs_sous_base[#VALEUR]" class="palette condbase ml-2 mr-1 [(#_indicateur:ID_TYPE_INDICATEUR|=={3}|oui)[(#COMPTEUR_BOUCLE|=={1}|oui) d-none]]" [value="(#ENV{couleurs_sous_base}|table_valeur{#VALEUR})"] />			
+							<small class="condbase [(#_indicateur:ID_TYPE_INDICATEUR|=={3}|oui)[(#COMPTEUR_BOUCLE|=={1}|oui) d-none]]"><:artaclim:couleur_sous_base:></small>
+							
+						</div>
+					</BOUCLE_jeux>
+					<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+						<label  class='nofx d-flex' for="autoriser_modifier_couleurs">
+							<input type="checkbox" class="checkbox" name="autoriser_modifier_couleurs" id="autoriser_modifier_couleurs" value="1" [(#ENV**{autoriser_modifier_couleurs}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_couleurs:></small></span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12 col-lg-8 mb-3">
+				<h5><:artaclim:bornes:></h5>
+				<div id="blocbornes" class="">
+					<input type='hidden' id='min' name='min' value="#ENV{min}" />
+					<input type='hidden' id='max' name='max' value="#ENV{max}" />
+					<p id="affbornes" class="mt-3 font-weight-bold text-center">[(#GET{cles}|table_valeur{#ENV{min}|sinon{0}})] - [(#GET{cles}|table_valeur{#ENV{max}|sinon{#GET{cles}|count}|moins{1}})]</p>
+					<div id="bornes"></div>
+
+					<div class="form-check checkbox-slider--b mt-4 text-left mx-auto">
+						<label  class='nofx d-flex' for="autoriser_modifier_bornes">
+							<input type="checkbox" class="checkbox" name="autoriser_modifier_bornes" id="autoriser_modifier_bornes" value="1" [(#ENV**{autoriser_modifier_bornes}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_bornes:></small></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-lg-4 mb-3">
+				<div class="">
+					<h5>Autres autorisations</h5>
+					<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+						<label  class='nofx d-flex' for="autoriser_modifier_donnees">
+							<input type="checkbox" class="checkbox" name="autoriser_modifier_donnees" id="autoriser_modifier_donnees" value="1" [(#ENV**{autoriser_modifier_donnees}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_donnees:></small></span>
+						</label>
+					</div>
+					<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+						<label  class='nofx d-flex' for="autoriser_telecharger_donnees">
+							<input type="checkbox" class="checkbox" name="autoriser_telecharger_donnees" id="autoriser_telecharger_donnees" value="1" [(#ENV**{autoriser_telecharger_donnees}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_telecharger_donnees:></small></span>
+						</label>
+					</div>
+					<div class="form-check checkbox-slider--b mt-2 text-left mx-auto">
+						<label  class='nofx d-flex' for="autoriser_afficher_droite">
+							<input type="checkbox" class="checkbox" name="autoriser_afficher_droite" id="autoriser_afficher_droite" value="1" [(#ENV**{autoriser_afficher_droite}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_afficher_droite:></small></span>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row my-4 justify-content-center">
+			<div class="col-12 col-lg-6 text-center">
+				<small><:artaclim:info_enregistrement:></small>
+			</div>
+		</div>
+		<div class="row mb-4 justify-content-between">
+			<div class="col-12 col-md-2 mb-2">
+			 <button type="submit" class="btn  btn-outline-light" name='enregistrer' value="enregistrer"><:artaclim:valider_rester:> </button>
+			</div>
+			<div class="col-12 col-md-5 mb-2">
+			 <button type="submit" class="btn vert" name="retourindicateurs" value="retourindicateurs"><:artaclim:valider_listeindicateurs:> </button>
+			</div>
+		</div>
+		<script>
+		var max = keys.length - 1 ;
+		$(function() {
+			if($( "#base" ).val() == ''){
+				$('.condbase').hide();
+			}else{
+				$('.condbase').show();
+			}
+			$( "#bornes" ).slider({
+			      range: true,
+			      min: 0,
+			      max: max,
+			      values: [ [(#ENV{min}|sinon{0})], 
+					[(#ENV{max}|oui) [(#ENV{max}|moins{1})] ]
+					[(#ENV{max}|non) [(#GET{cles}|count)] ] 
+				 ],
+			      slide: function( event, ui ) {
+					$( "#affbornes" ).html( "" + keys[ui.values[ 0 ]] + " - " + keys[ui.values[ 1 ]] );
+					$( "#min" ).val(ui.values[ 0 ]);
+					$( "#max" ).val(ui.values[ 1 ]+1);
+			      }
+			    });
+		});
+		$( "#base" ).on('input',function() {
+			if($( this ).val() == ''){
+				$('.condbase').hide();
+			}else{
+				$('.condbase').show();
+			}
+		});
+		</script>
+</BOUCLE_data>
+
+<p class="error"><:artaclim:erreur_pas_de_donnees:> [<a href="(#URL_PAGE{donnees_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})"><:artaclim:charger_donnees:></a>]</p>
+
+<//B_data>
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_indicateur>

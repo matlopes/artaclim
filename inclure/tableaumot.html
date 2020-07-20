@@ -1,0 +1,63 @@
+<BOUCLE_user(AUTEURS){id_auteur=#SESSION{id_auteur}}{tout}>
+<div class="tableau-container container-fluid px-1 px-md-2 px-lg-5">
+	<div class="row p-0 pr-lg-5 ">
+	<div class="col-12">
+	<h1 class="text-center mb-0">[(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg)]#INFO_TITRE{mot,#ENV{id_mot}}</h1>
+	<hr class="separateur2 mb-4" />
+	</div>
+	<BOUCLE_tableau(INDICATEURS){id_auteur}{id_mot=#ENV{id_mot}}>
+	<div class="col-xs-12 col-md-6 col-xxl-4">
+		<div class="box-indicateur p-1 p-lg-2 pt-thematique mb-4 position-relative">
+			<B_thematiques>
+			<div class="thematiques position-absolute d-flex">			
+			<BOUCLE_thematiques(MOTS){id_indicateur}{0,5}>
+				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE})</span>]
+			</BOUCLE_thematiques>
+			</div>
+			</B_thematiques>
+			<div class="titre">
+			<a href="#URL_INDICATEUR"><h6 class="text-center mb-0 font-weight-bold">#TITRE</h6></a>
+			<p class="m-0 text-center"><small class="lieu d-block">[[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ] (#LIEU)]</small></p>
+			</div>
+			<div class="pr-1"><INCLURE{fond=inclure/representation,id_indicateur}></div>
+			<div class="position-absolute box-actions box-top text-center  d-print-none">
+				<div class="ajax">
+					#FORMULAIRE_EPINGLER{#ID_INDICATEUR}
+				</div>
+				<div class="autres-actions">
+				<div class="">
+					[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_EXPORTABLES}}|oui)<a href="#" id="imageDownloader#ID_INDICATEUR" download="indicateur#ID_INDICATEUR.png" target="_blank" data-toggle="tooltip" data-placement="left" title="<:artaclim:exporter_image:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-export-image.svg}|balise_svg)]</a>]
+					<BOUCLE_donnees(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+					[(#CONFIG_INDICATEUR|table_valeur{autoriser_telecharger_donnees}|=={1}|oui)
+					<a href="#FICHIER" target='_blank' data-toggle="tooltip" data-placement="left" title="<:artaclim:telecharger_donnees:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-import.svg}|balise_svg)]</a>
+					]
+					</BOUCLE_donnees>
+					<a href="#URL_INDICATEUR" data-toggle="tooltip" data-placement="left" title="<:artaclim:parametrer:>" class="autre-action p-1 d-block">[(#CHEMIN{images/pict-param-small.svg}|balise_svg)]</a>
+				</div>
+				<strong class="plus-actions pt-0 px-1 pb-2 d-block">&mldr;</strong>
+				</div>
+				
+			</div>
+			<div class="position-absolute box-actions box-bottom text-center  d-print-none">
+				<a onclick="return false;" class="p-1 d-block trigger-info">[(#CHEMIN{images/pict-info.svg}|balise_svg)]</a>
+				<a href="#URL_INDICATEUR" data-toggle="tooltip" data-placement="left" title="<:artaclim:zoom_indicateur:>" class="p-1 d-block">[(#CHEMIN{images/pict-voir-small.svg}|balise_svg)]</a>
+			</div>
+			<div class="position-absolute box-info p-3">
+				[(#DESCRIPTIF)]
+				[<h6><:artaclim:interpretation:></h6>
+				(#INTERPRETATION)]
+				[<p>[(#CHEMIN{images/pict-lieu-small.svg}|image_reduire{20}) ]<strong><:artaclim:lieu:></strong> (#LIEU)</p>]
+				[<p>[(#CHEMIN{images/pict-source-small.svg}|image_reduire{20}) ]<strong><:artaclim:source:></strong> (#SOURCE)</p>]
+			</div>
+		</div>
+	</div>
+	</BOUCLE_tableau>
+		<div class="col-6 mx-auto">
+			<h5 class="text-center"><:artaclim:thematique_vide:></h5>
+		</div>
+	<//B_tableau>
+	</div>
+</div>
+
+<INCLURE{fond=inclure/scripts-tableau}>
+</BOUCLE_user>

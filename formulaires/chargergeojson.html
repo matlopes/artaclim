@@ -1,0 +1,37 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+<h5 class="text-center text-uppercase"><:artaclim:contour:></h5>
+<div class='formulaire_spip formulaire_chargergeojson' id='formulaire_chargergeojson-#ENV{id,new}'>
+	<span class="image_loading"></span>
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+		<BOUCLE_data(DOCUMENTS){id_indicateur}{tout}{extension=json}{0,1}>
+				<div>
+				<a href="#FICHIER">#LOGO_DOCUMENT <small class="d-block">#FICHIER</small></a>
+				<a class="d-block mt-2" href="#URL_ACTION_AUTEUR{dissocier_document,#ID_INDICATEUR-indicateur-#ID_DOCUMENT-suppr-safe,#SELF}"  onclick="return confirm('<:artaclim:confirmer_suppression_donnees:>');" >Supprimer le document</a>
+				</div>
+		</BOUCLE_data>
+
+		<div class="editer-groupe">
+		    <div class='editer editer_fichier_upload[ (#ENV**{erreurs}|table_valeur{fichier_upload}|oui)erreur]'>
+			<label for='geojson_upload#ENV{domid}' class="d-block"><:artaclim:choisissez_geojson:></label>[
+			<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{fichier_upload})</span>
+			]<input class='file[(#ENV{multi}|=={non}|non) multi]' type="file" name="fichier_upload[]" value='[(#ENV{fichier_upload}|is_array|?{'', #ENV{fichier_upload}})]' id="geojson_upload#ENV{domid}" size='11' />
+			<!--editer_fichier_upload-->
+		    </div>
+		</div>
+
+		<p class='boutons mt-4 text-center'><input class='submit btn' type="submit" name="joindre_upload" value="<:artaclim:televerser:>"/></p>
+
+<//B_data>
+
+		
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_indicateur>

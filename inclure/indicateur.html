@@ -1,0 +1,74 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+<div class="container">
+	<div class="row">
+		<div class="col-12 col-md-10 col-lg-8 mx-auto">
+		<h1 class="text-center mb-0">#TITRE</h1>
+		<hr class="separateur2 my-4" />
+		[(#SESSION{id_auteur}|oui)<div class="box-indicateur p-0 p-lg-2 mb-4 position-relative">
+			<div class="pt-3"><INCLURE{fond=inclure/representation,id_indicateur}></div>
+		</div>]
+
+		<div class="cartouche">
+		[<div class="d-flex">[<div class="mr-2">(#CHEMIN{images/pict-info2.svg}|balise_svg)</div>]<div class="py-1"><h6 class="font-weight-bold"><:artaclim:descriptif:></h6> (#DESCRIPTIF)</div></div>]
+		[<div class="d-flex">[<div class="mr-2">(#CHEMIN{images/pict-interpretation.svg}|balise_svg)</div>]<div class="py-1"><h6 class="font-weight-bold"><:artaclim:interpretation:></h6> (#INTERPRETATION)</div></div>]
+		[<div class="d-flex">[<div class="mr-2">(#CHEMIN{images/pict-lieu-small.svg}|balise_svg)</div>]<div class="py-1"><strong><:artaclim:lieu:> : </strong> (#LIEU)</div></div>]
+		<B_tags><div class="d-flex">[<div class="mr-2">(#CHEMIN{images/pict-tag.svg}|balise_svg)</div>]<div class="py-1 thematiques"><strong><:artaclim:thematiques:> : </strong> <BOUCLE_tags(MOTS){id_groupe=1}{id_indicateur}> <a href="#URL_MOT">[(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg)] #TITRE </a> </BOUCLE_tags></div></div></B_tags>
+		[<div class="d-flex">[<div class="mr-2">(#CHEMIN{images/pict-source-small.svg}|balise_svg)</div>]<div class="py-1"><strong><:artaclim:source:> : </strong> (#SOURCE)</div></div>]
+		</div>
+		</div>
+	</div>
+</div>
+<hr class="separateur1 mt-5" />
+<div class="container d-print-none">
+	<div class="row">
+		<div class="col-12 col-md-10 col-lg-8 mx-auto">
+			[(#ID_TYPE_INDICATEUR|=={5}|non)			
+			<h3 class="mt-2 mb-0">[(#CHEMIN{images/pict-param-small.svg}|balise_svg)] <:artaclim:reglages:></h3>
+			<hr class="separateur2 mt-0 mb-4" />]
+			[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_SANS_DATA}}|non)
+			[(#ID_TYPE_INDICATEUR|=={4}|non)
+			[(#REM) Cas d'un indicateuqui n'est pas de type carto et pas dans la liste des "sans data" (les qualitatifs) ]
+			<div class="ajax">
+			#FORMULAIRE_PARAMETRERINDICATEURPUBLIC{#ID_INDICATEUR,#SELF}
+			</div>
+			]]
+			[(#ID_TYPE_INDICATEUR|=={4}|oui)
+			<div class="ajax">
+			#FORMULAIRE_PARAMETRERINDICATEURPUBLIC_CARTO{#ID_INDICATEUR,#SELF}
+			</div>
+			]
+			[(#ID_TYPE_INDICATEUR|=={6}|oui)
+			<div class="ajax">
+			#FORMULAIRE_PARAMETRERINDICATEURPUBLIC_NOMBRE{#ID_INDICATEUR,#SELF}
+			</div>
+			]
+			[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_donnees}|=={1}|oui)
+				<h3 class="mt-4 mb-0">[(#CHEMIN{images/pict-import.svg}|balise_svg)] <:artaclim:modifier_donnees:></h3>
+				<hr class="separateur2 mt-0 mb-4" />
+				<div class="row justify-content-center">
+					<div class="col-12"><INCLURE{fond=inclure/explication_type,id_type_indicateur=#ID_TYPE_INDICATEUR}></div>
+					[(#ID_TYPE_INDICATEUR|=={4}|oui)
+					<div class="col-lg-6 text-center">
+						<div class="ajax">
+						#FORMULAIRE_CHARGERGEOJSON{#ID_INDICATEUR,#SELF}
+						</div>
+					</div>]
+					<div class="col-lg-6 text-center">
+						<div class="ajax">
+						[(#ID_TYPE_INDICATEUR|in_array{#CONST{_TYPES_INDICATEURS_SANS_DATA}}|non)
+						#FORMULAIRE_CHARGERDONNEES{#ID_INDICATEUR,#SELF,#SELF}
+						]
+						[(#ID_TYPE_INDICATEUR|=={5}|oui)
+						#FORMULAIRE_DONNEESOBJECTIF{#ID_INDICATEUR,#SELF,#SELF}
+						]
+						[(#ID_TYPE_INDICATEUR|=={6}|oui)
+						#FORMULAIRE_DONNEESNOMBRE{#ID_INDICATEUR,#SELF,#SELF}
+						]
+						</div>
+					</div>
+				</div>
+			]
+		</div>
+	</div>
+</div>
+</BOUCLE_indicateur>

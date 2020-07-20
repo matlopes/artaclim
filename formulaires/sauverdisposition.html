@@ -1,0 +1,8 @@
+<form action="#ENV{action}" id="formsavedisposition#ENV{id_indicateur}" method="post" class="savedisposition d-none d-md-inline-block">
+<div class="d-none">
+#ACTION_FORMULAIRE
+<input type='hidden' class="ordre_tableau" name="ordre_tableau" value="" />
+<input type='hidden' class="ordre_tableau_pilotage" name="ordre_tableau_pilotage" value="" />
+</div>
+<a class="btn btn-rond disabled bouton_save" data-toggle="tooltip" title="<:artaclim:save_disposition:>">[(#CHEMIN{images/pict-enregistrer.svg}|balise_svg{<:artaclim:save_disposition:>})]</a>
+</form>

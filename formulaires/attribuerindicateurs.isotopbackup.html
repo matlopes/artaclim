@@ -1,0 +1,60 @@
+<BOUCLE_utilisateur(AUTEURS){id_auteur=#ENV{id_auteur}}{tout}>
+
+<div class='formulaire_spip formulaire_attribuerindicateurs' id='formulaire_attribuerindicateurs-#ENV{id,new}'>
+
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+		<p class="alert alert-info"><:artaclim:explication_attribuer_indicateurs:></p>
+
+		<select id="indicateurs" name="indicateurs[]" multiple>
+			<BOUCLE_indicateurs(INDICATEURS)>
+				<option data-indicateur='indicateur#ID_INDICATEUR' value="#ID_INDICATEUR" [(#ID_INDICATEUR|in_array{#ENV{indicateurs}}|oui) selected]>#TITRE - #SOURCE - #LIEU</option>
+			</BOUCLE_indicateurs>
+		</select>
+		<div class="row">
+			<div class="col-6" id="list_biblio">
+				<BOUCLE_biblio(INDICATEURS){!id_indicateur IN #ENV{indicateurs}}>
+					<div id="indicateur#ID_INDICATEUR" [data-date-created="(#DATE|affdate{'Y-m-d'})"]  class="indicateur <BOUCLE_tags(MOTS){id_indicateur}> mot#ID_MOT </BOUCLE_tags>" >
+						#TITRE [- (#SOURCE)] [- (#LIEU)]
+						<a href="#" class="add">+</a><a href="#" class="remove">-</a>
+					</div>
+				</BOUCLE_biblio>
+			</div>
+			<div class="col-6" id="list_selected">
+				<BOUCLE_selected(INDICATEURS){id_indicateur IN #ENV{indicateurs}}>
+					<div id="indicateur#ID_INDICATEUR" [data-date-created="(#DATE|affdate{'Y-m-d'})"] class="indicateur <BOUCLE_tags2(MOTS){id_indicateur}> mot#ID_MOT </BOUCLE_tags2>" >
+						#TITRE [- (#SOURCE)] [- (#LIEU)]						
+						<a href="#" class="add">+</a><a href="#" class="remove">-</a>
+					</div>
+				</BOUCLE_selected>
+			</div>
+		</div>
+
+		 <button type="submit" class="btn  btn-secondary" name="retourindicateurs" value="retourindicateurs"><:artaclim:valider_listeauteurs:> </button>
+		<script>
+		var $grid = $('#list_biblio').isotope({
+		  itemSelector: '.element-item',
+		  layoutMode: 'fitRows'
+		});
+		$('.add').click(function(){
+			var indicateur=$(this).parent();
+			$('#list_selected').prepend(indicateur);
+			$("[data-indicateur='"+indicateur.attr('id')+"'").prop('selected', true);
+		});
+		$('.remove').click(function(){
+			var indicateur=$(this).parent();
+			$('#list_biblio').prepend(indicateur);
+			$("[data-indicateur='"+indicateur.attr('id')+"'").prop('selected', false);
+		});
+		</script>
+
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_utilisateur>

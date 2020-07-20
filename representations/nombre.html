@@ -1,0 +1,54 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+#SET{config_user,#ARRAY}
+<BOUCLE_configuser(spip_auteurs_liens){id_auteur=#SESSION{id_auteur}}{objet=indicateur}{id_objet=#ID_INDICATEUR}{0,1}>
+#SET{config_user,#CONFIG_INDICATEUR}
+</BOUCLE_configuser>
+[(#SESSION{id_auteur}|oui)
+	[(#SET{couleur,#CONFIG_INDICATEUR|table_valeur{couleur}|sinon{#CONST{_COULEURS_DEFAUT}|table_valeur{1}}})]
+	[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_couleurs}|oui)
+		#SET{couleur,#GET{config_user}|table_valeur{couleur}|sinon{#CONFIG_INDICATEUR|table_valeur{couleur}|sinon{#CONST{_COULEURS_DEFAUT}|table_valeur{1}}}}
+	]
+	[(#SET{picto,#CONFIG_INDICATEUR|table_valeur{picto}})]
+	[(#CONFIG_INDICATEUR|table_valeur{autoriser_modifier_picto}|oui)
+		#SET{picto,#GET{config_user}|table_valeur{picto}|sinon{#CONFIG_INDICATEUR|table_valeur{picto}}}
+	]
+	<style>
+	#nombre-container#ID_INDICATEUR {
+		color:[(#GET{couleur})];
+	}
+	#nombre-container#ID_INDICATEUR svg{
+		height:80px;
+	}
+	#nombre-container#ID_INDICATEUR svg,#nombre-container#ID_INDICATEUR .cls-1,#nombre-container#ID_INDICATEUR .cls-3{
+		fill:[(#GET{couleur})];
+	}
+	.nombre{
+		font-size:80px;
+	}
+	</style>
+	<div class="text-center nombre-container" id="nombre-container#ID_INDICATEUR" style="line-height:1;">
+		<div class="d-flex justify-content-center pt-2">[<span class="picto">(#CHEMIN{representations/pictos_nombre/#GET{picto}}|balise_svg)</span>]
+		[<span class="counter nombre font-weight-bold" id="#nombre#ID_INDICATEUR" data-count="(#CONFIG_INDICATEUR|table_valeur{nombre})">0</span>]
+		</div>
+		[<p class="intitule font-weight-bold">(#CONFIG_INDICATEUR|table_valeur{intitule})</p>]
+	</div>
+]
+<script>
+function resize#ID_INDICATEUR(){
+	$('#nombre-container#ID_INDICATEUR').height($('#nombre-container#ID_INDICATEUR').width()/2 +17);
+	var hauteur = $('#nombre-container#ID_INDICATEUR').height() *4 /10 ;
+	var hauteurbasse = $('#nombre-container#ID_INDICATEUR').height() / 10;
+	$('#nombre-container#ID_INDICATEUR .picto svg').height(hauteur);
+	$('#nombre-container#ID_INDICATEUR .nombre').css({ 'font-size': hauteur });
+	$('#nombre-container#ID_INDICATEUR .intitule').css({ 'font-size': hauteurbasse });
+}
+$(function() {
+	resize#ID_INDICATEUR();
+});
+$(window).resize(function() {
+	resize#ID_INDICATEUR();
+}
+);
+</script>
+
+</BOUCLE_indicateur>

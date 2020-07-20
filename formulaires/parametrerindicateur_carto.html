@@ -1,0 +1,82 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+
+<div class='formulaire_spip formulaire_parametrerindicateur_carto' id='formulaire_parametrerindicateur_carto-#ENV{id,new}'>
+
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+[(#SET{nbjeux,0})]
+#SET{intitules,#ARRAY}
+<BOUCLE_data(DOCUMENTS){id_indicateur}{tout}{extension=csv}{0,1}>
+
+		<BOUCLE_entete(DATA){source csv,#FICHIER}{0,1}>
+		[(#SET{nbjeux,#VALEUR|count|div{2}|moins{1}})]
+		[(#SET{intitules,#VALEUR|array_slice{1,#GET{nbjeux}}})]
+		</BOUCLE_entete>
+
+		[(#_indicateur:ID_TYPE_INDICATEUR|=={1}|oui)
+			[(#GET{nbjeux}|>{1}|oui) #SET{nbjeux,1} 
+				<p class='alert alert-info'><:artaclim:erreur_donnees_multiple_sursimple:></p>
+			]
+		]
+		<div class="row">
+			<div class="col-12 col-lg-6" id="couleurs">
+				<h5><:artaclim:couleur:></h5>
+				<p><small><:artaclim:explication_couleur_zone:></small></p>
+				<h6 class="text-left">[(#GET{intitules}|table_valeur{0})]</h6>
+				<div class="d-flex align-items-center mb-2">
+					<input type="text" id="couleur" name="couleur" class="palette mr-2" [value="(#ENV{couleur})"] />
+					<small><:artaclim:couleur_zones:></small>
+				</div>
+				<div class="form-check checkbox-slider--b mt-3">
+					<label  class='nofx d-flex' for="autoriser_modifier_couleurs">
+						<input type="checkbox" class="checkbox" name="autoriser_modifier_couleurs" id="autoriser_modifier_couleurs" value="1" [(#ENV**{autoriser_modifier_couleurs}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_couleurs:></small></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-12 col-lg-4">
+				<h5>Autres autorisations</h5>
+				<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+					<label  class='nofx d-flex' for="autoriser_modifier_donnees">
+						<input type="checkbox" class="checkbox" name="autoriser_modifier_donnees" id="autoriser_modifier_donnees" value="1" [(#ENV**{autoriser_modifier_donnees}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_donnees:></small></span>
+					</label>
+				</div>
+				<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+					<label  class='nofx d-flex' for="autoriser_telecharger_donnees">
+						<input type="checkbox" class="checkbox" name="autoriser_telecharger_donnees" id="autoriser_telecharger_donnees" value="1" [(#ENV**{autoriser_telecharger_donnees}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_telecharger_donnees:></small></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row my-4 justify-content-center">
+			<div class="col-12 col-lg-6 text-center">
+				<small><:artaclim:info_enregistrement:></small>
+			</div>
+		</div>
+
+		<div class="row mb-4 justify-content-between">
+			<div class="col-12 col-md-2 mb-2">
+			 <button type="submit" class="btn  btn-outline-light" name='enregistrer' value="enregistrer"><:artaclim:valider_rester:> </button>
+			</div>
+			<div class="col-12 col-md-5 mb-2">
+			 <button type="submit" class="btn vert" name="retourindicateurs" value="retourindicateurs"><:artaclim:valider_listeindicateurs:> </button>
+			</div>
+		</div>
+
+		
+</BOUCLE_data>
+
+<p class="error"><:artaclim:erreur_pas_de_donnees:> [<a href="(#URL_PAGE{donnees_indicateur}|parametre_url{id_indicateur,#ID_INDICATEUR})"><:artaclim:charger_donnees:></a>]</p>
+
+<//B_data>
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_indicateur>

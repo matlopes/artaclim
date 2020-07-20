@@ -1,0 +1,103 @@
+#CACHE{24*3600}
+<BOUCLE_indicateur(INDICATEURS){id_indicateur}>
+
+[(#SESSION{id_auteur}|oui)
+	<div class="chart-container position-relative">
+	    <canvas id="chart#ID_INDICATEUR"></canvas>
+	</div>
+]
+	<script>
+	var ctx#ID_INDICATEUR = $('#chart#ID_INDICATEUR');
+	var $labels#ID_INDICATEUR = [];
+	var $label#ID_INDICATEUR= [];
+
+#SET{config_user,#ARRAY}
+<BOUCLE_configuser(spip_auteurs_liens){id_auteur=#SESSION{id_auteur}}{objet=indicateur}{id_objet=#ID_INDICATEUR}{0,1}>
+#SET{config_user,#CONFIG_INDICATEUR}
+</BOUCLE_configuser>
+#SET{avance,#CONFIG_INDICATEUR|table_valeur{avance}|nettoyer_data}
+#SET{objectif,#CONFIG_INDICATEUR|table_valeur{objectif}|nettoyer_data}
+
+	$( document ).ready(function() {
+		
+		var data = [
+			[(#GET{objectif}|div{4}|nettoyer_data)],
+			[(#GET{objectif}|mult{3}|div{4}|nettoyer_data)],
+			[(#GET{objectif}|mult{99}|div{100}|nettoyer_data)],
+			#GET{objectif}			
+		];
+		var value = #GET{avance};
+
+		var config = {
+		  type: 'gauge',	
+			plugins: [ChartDataLabels],
+		  data: {
+		    datasets: [{
+			 data: data,
+			 value: value,
+			 backgroundColor: [['(#CONST{_COULEURS_DEFAUT}|table_valeur{1})'], ['(#CONST{_COULEURS_DEFAUT}|table_valeur{3})'], ['(#CONST{_COULEURS_DEFAUT}|table_valeur{4})'],chroma(['(#CONST{_COULEURS_DEFAUT}|table_valeur{4})']).darken().css()],
+			 borderWidth: 0,
+				datalabels: {
+		           color: chroma(['(#CONST{_COULEURS_DEFAUT}|table_valeur{4})']).darken().css(),
+
+				formatter:function(value, context){
+					if(context.dataIndex == 3){
+						return Math.round(value);
+					}else{
+						return '';
+					}
+				},
+				anchor: 'end',
+				align : 'right',
+				offset : -3,
+				font: {
+					weight: 'bold',
+					size: 12
+				   }
+		       }
+		    }]
+		  },
+		  options: {
+		    responsive: true,
+		    layout: {
+			 padding: {
+			   bottom: 30
+			 }
+		    },
+		    needle: {
+			 // Needle circle radius as the percentage of the chart area width
+			 radiusPercentage: 2,
+			 // Needle width as the percentage of the chart area width
+			 widthPercentage: 2,
+			 // Needle length as the percentage of the interval between inner radius (0%) and outer radius (100%) of the arc
+			 lengthPercentage: 60,
+			 // The color of the needle
+			 color: ['(#CONST{_COULEURS_DEFAUT}|table_valeur{7})']
+		    },
+		    valueLabel: {
+			formatter: Math.round,
+			color:'#ABB1B7',
+			backgroundColor:['(#CONST{_COULEURS_DEFAUT}|table_valeur{7})'],
+			
+		    },
+			layout: {
+				padding: {
+				      right: 50,
+				      left: 50,
+					bottom:10
+				  }
+			   },
+			animation: {
+				onComplete: function(animation){
+					$('#imageDownloader#ID_INDICATEUR').attr('href', this.toBase64Image());
+				}
+			},
+		  }
+		};
+
+		var ctx#ID_INDICATEUR = $('#chart#ID_INDICATEUR');
+		var myGauge#ID_INDICATEUR = new Chart(ctx#ID_INDICATEUR, config);
+		});
+	</script>
+
+</BOUCLE_indicateur>

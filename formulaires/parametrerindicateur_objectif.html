@@ -1,0 +1,42 @@
+<BOUCLE_indicateur(INDICATEURS){id_indicateur=#ENV{id_indicateur}}>
+
+<div class="formulaire_spip formulaire_chargerdonnees text-left" id='formulaire_chargerdonnees-#ENV{id,new}'>
+	<span class="image_loading"></span>
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</div>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	
+	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
+		#ACTION_FORMULAIRE
+
+		<div class="row my-4">
+			<div class="col-12">
+				<div class="">
+					<h5>Autres autorisations</h5>
+					<div class="form-check checkbox-slider--b mt-3 text-left mx-auto">
+						<label  class='nofx d-flex' for="autoriser_modifier_donnees">
+							<input type="checkbox" class="checkbox" name="autoriser_modifier_donnees" id="autoriser_modifier_donnees" value="1" [(#ENV**{autoriser_modifier_donnees}|?{' '})checked="checked"] onchange="jQuery(this).addClass('modifie');" /><span><small><:artaclim:autoriser_modifier_donnees:></small></span>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row my-4 justify-content-center">
+			<div class="col-12 col-lg-6 text-center">
+				<small><:artaclim:info_enregistrement:></small>
+			</div>
+		</div>
+		<div class="row mb-4 justify-content-between">
+			<div class="col-12 col-md-2 mb-2">
+			 <button type="submit" class="btn  btn-outline-light" name='enregistrer' value="enregistrer"><:artaclim:valider_rester:> </button>
+			</div>
+			<div class="col-12 col-md-5 mb-2">
+			 <button type="submit" class="btn vert" name="retourindicateurs" value="retourindicateurs"><:artaclim:valider_listeindicateurs:> </button>
+			</div>
+		</div>
+		
+		
+	</div></form>
+</div>
+
+
+</BOUCLE_indicateur>
