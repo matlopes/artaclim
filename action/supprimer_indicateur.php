@@ -10,11 +10,6 @@
  *  Pour plus de details voir le fichier COPYING.txt ou l'aide en ligne.   *
 \***************************************************************************/
 
-/**
- * Gestion de l'action dissocier_document
- *
- * @package SPIP\Medias\Action
- **/
 
 if (!defined('_ECRIRE_INC_VERSION')) {
 	return;
