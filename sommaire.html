@@ -44,7 +44,7 @@
 					#FORMULAIRE_SAUVERDISPOSITION
 					</div>
 					<a class="btn btn-rond " href="#" data-toggle="tooltip" onclick="window.print();" title="<:artaclim:imprimer:>">[(#CHEMIN{images/pic-print.svg}|balise_svg{<:artaclim:imprimer:>})]</a>
-					<a class="btn btn-rond jaune" href="#" data-toggle="tooltip" title="<:artaclim:guide_utilisateur:>">[(#CHEMIN{images/pict-guide-small.svg}|balise_svg{<:artaclim:guide_utilisateur:>})]</a>
+					<INCLURE{fond=inclure/lienguide}>
 					<a class="btn btn-rond gris" href="#URL_LOGOUT{#URL_SITE_SPIP}" data-toggle="tooltip" title="<:icone_deconnecter:>">[(#CHEMIN{images/pict-deconnexion-small.svg}|balise_svg{<:icone_deconnecter:>})]</a>
 				</div>
 				<hr class="separateur1 mt-0 mb-3" />
