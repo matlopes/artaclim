@@ -208,21 +208,21 @@ h1 {
 	height:4rem;
 	width:4rem;
 	}
-	 .cls-1,.cls-3{
+	 .cls-1,.cls-3,svg, svg g{
 		//stroke:$rose-sombre;
-		fill:$rose-sombre;
+		fill:$rose-sombre !important;
 	 }
 
 	&.vert{
-	 .cls-1,.cls-3{
+	 .cls-1,.cls-3,svg, svg g{
 		//stroke:$vert;
-		fill:$vert;
+		fill:$vert !important;
 	 }
 	}
 	&.violet{
-	 .cls-1,.cls-3{
+	 .cls-1,.cls-3,svg, svg g{
 		//stroke:$violet;
-		fill:$violet;
+		fill:$violet !important;
 	}
 	}
 }

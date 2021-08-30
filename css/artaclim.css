@@ -197,14 +197,14 @@ h1 svg {
   height: 4rem;
   width: 4rem;
 }
-h1 .cls-1, h1 .cls-3 {
-  fill: #E24C6A;
+h1 .cls-1, h1 .cls-3, h1 svg, h1 svg g {
+  fill: #E24C6A !important;
 }
-h1.vert .cls-1, h1.vert .cls-3 {
-  fill: #A0B948;
+h1.vert .cls-1, h1.vert .cls-3, h1.vert svg, h1.vert svg g {
+  fill: #A0B948 !important;
 }
-h1.violet .cls-1, h1.violet .cls-3 {
-  fill: #A269A4;
+h1.violet .cls-1, h1.violet .cls-3, h1.violet svg, h1.violet svg g {
+  fill: #A269A4 !important;
 }
 
 /*** Menus de navigation ***/
