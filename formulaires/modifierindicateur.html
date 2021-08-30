@@ -39,9 +39,13 @@
 			</div>
 		</div>
 		<div class="col-8 mb-4">
-		<h6 class="font-weight-bold"><:artaclim:thematiques:></h6>
+		<h5 class="font-weight-bold"><:artaclim:thematiques:></h5>
 		<div class="row">
-		<BOUCLE_thematiques(MOTS){id_groupe=1}>
+		<BOUCLE_groupes(GROUPES_MOTS){id_groupe!=2}>
+		<div class="col-12">
+		<h6>#TITRE</h6>
+		<div class="row liste_mots p-2 mt-2 mb-4">
+		<BOUCLE_thematiques(MOTS){id_groupe}>
 			<div class="col-sm-6 col-lg-4">
 			<div class="form-check  form-check-inline">
 			  <input class="form-check-input" type="checkbox" id="thematiques#ID_MOT" name="thematiques[#ID_MOT]" value="1" [(#ENV{thematiques}|table_valeur{#ID_MOT}|=={1}|oui) checked]>
@@ -51,6 +55,9 @@
 			</div>
 			</div>
 		</BOUCLE_thematiques>
+		</div>
+		</div>
+		</BOUCLE_groupes>
 		</div>
 		</div>
 		<div class="col-4 ">

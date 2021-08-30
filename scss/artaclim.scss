@@ -559,6 +559,10 @@ h1 {
 	.form-check-label{
 		line-height:1;
 	}
+	.liste_mots{
+		@extend .neumorphic-shadow-inner;
+		border-radius:17px;
+	}
 }
 .choix_picto{
 	svg{

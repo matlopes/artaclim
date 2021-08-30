@@ -58,7 +58,7 @@ function formulaires_modifierindicateur_traiter_dist($id_indicateur,$url){
 		array(
 			"L.id_objet = $id_indicateur",
 			"L.objet = ".sql_quote('indicateur'),
-			"M.id_groupe = 1"
+			"M.id_groupe != 2"
 		),
 		"",
 		"L.id_mot"
