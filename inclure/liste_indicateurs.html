@@ -11,9 +11,13 @@
 		<div class="col-3 pr-5">
 		<select class="filter custom-select form-control-sm">
 			<option value="*"><:artaclim:toutes_thematiques:></option>
-			<BOUCLE_mots(MOTS){id_groupe=1}>
+			<BOUCLE_groupes(GROUPES_MOTS){id_groupe!=2}{par id_groupe}>
+			<optgroup [label="(#TITRE|attribut_html)"]>
+			<BOUCLE_mots(MOTS){id_groupe}{par titre}>
 				<option value="mot#ID_MOT">#TITRE</option>
 			</BOUCLE_mots>
+			</optgroup>
+			</BOUCLE_groupes>
 		</select>
 		</div>
 		<div class="col-3">
