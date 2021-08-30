@@ -8,14 +8,22 @@
 		<hr class="separateur2 mt-0 mb-4 d-print-none" />
 		</div>
 	</div>
+	#SET{id_groupe,1}
+	<BOUCLE_groupe(GROUPES_MOTS){id_auteur}{0,1}>
+	#SET{id_groupe,#ID_GROUPE}
+	</BOUCLE_groupe>
+	#SET{mots_thematique,#ARRAY}
+	<BOUCLE_motsthematique(MOTS){id_groupe=#GET{id_groupe}}>
+	#SET{mots_thematique,#GET{mots_thematique}|push{#ID_MOT}}
+	</BOUCLE_motsthematique>
 	<div class="row p-0 pr-lg-5" id="sortable">
-	<BOUCLE_tableau(INDICATEURS){id_auteur}{!id_mot=13}{par ordre_tableau}{choisi_tableau=oui}>
+	<BOUCLE_tableau(INDICATEURS){id_auteur}{!id_mot=13}{id_mot IN #GET{mots_thematique}}{par ordre_tableau}{choisi_tableau=oui}>
 	<div class="col-xs-12 col-md-6 col-xxl-4 mb-4" data-indicateur="ordretab_#ID_INDICATEUR">
 		<div class="box-indicateur p-1 p-lg-2 pt-thematique position-relative">
 			<B_thematiques>
 			<div class="thematiques position-absolute d-flex">			
-			<BOUCLE_thematiques(MOTS){id_indicateur}{0,5}>
-				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE})</span>]
+			<BOUCLE_thematiques(MOTS){id_indicateur}{id_mot IN #GET{mots_thematique}}{0,5}>
+				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE}|inserer_attribut{width,''}|inserer_attribut{height,''})</span>]
 			</BOUCLE_thematiques>
 			</div>
 			</B_thematiques>
@@ -73,13 +81,13 @@
 		</div>
 	</div>
 	<div class="row p-0 pr-lg-5" id="sortablepilotage">
-	<BOUCLE_pilotage(INDICATEURS){id_auteur}{id_mot=13}{par ordre_tableau}{choisi_tableau=oui}>
+	<BOUCLE_pilotage(INDICATEURS){id_auteur}{id_mot=13}{id_mot IN #GET{mots_thematique}}{par ordre_tableau}{choisi_tableau=oui}>
 	<div class="col-xs-12 col-md-6 col-xxl-4 mb-4" data-indicateur="ordretabpilotage_#ID_INDICATEUR">
 		<div class="box-indicateur p-1 p-lg-2 pt-thematique position-relative">
 			<B_thematiques2>
 			<div class="thematiques position-absolute d-flex">			
-			<BOUCLE_thematiques2(MOTS){id_indicateur}{0,5}>
-				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE})</span>]
+			<BOUCLE_thematiques2(MOTS){id_indicateur}{id_mot IN #GET{mots_thematique}}{0,5}>
+				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE}|inserer_attribut{width,''}|inserer_attribut{height,''})</span>]
 			</BOUCLE_thematiques2>
 			</div>
 			</B_thematiques2>

@@ -5,13 +5,22 @@
 	<h1 class="text-center mb-0">[(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg)]#INFO_TITRE{mot,#ENV{id_mot}}</h1>
 	<hr class="separateur2 mb-4" />
 	</div>
+	#SET{id_groupe,1}
+	<BOUCLE_groupe(GROUPES_MOTS){id_auteur}{0,1}>
+	#SET{id_groupe,#ID_GROUPE}
+	</BOUCLE_groupe>
+	#SET{mots_thematique,#ARRAY}
+	<BOUCLE_motsthematique(MOTS){id_groupe=#GET{id_groupe}}>
+	#SET{mots_thematique,#GET{mots_thematique}|push{#ID_MOT}}
+	</BOUCLE_motsthematique>
+	
 	<BOUCLE_tableau(INDICATEURS){id_auteur}{id_mot=#ENV{id_mot}}>
 	<div class="col-xs-12 col-md-6 col-xxl-4">
 		<div class="box-indicateur p-1 p-lg-2 pt-thematique mb-4 position-relative">
 			<B_thematiques>
 			<div class="thematiques position-absolute d-flex">			
-			<BOUCLE_thematiques(MOTS){id_indicateur}{0,5}>
-				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE})</span>]
+			<BOUCLE_thematiques(MOTS){id_indicateur}{id_mot IN #GET{mots_thematique}}{0,5}>
+				[<span class="btn-thematique p-1">(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg{#TITRE}|inserer_attribut{width,''}|inserer_attribut{height,''})</span>]
 			</BOUCLE_thematiques>
 			</div>
 			</B_thematiques>
