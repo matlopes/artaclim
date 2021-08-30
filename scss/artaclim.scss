@@ -259,8 +259,8 @@ h1 {
 		svg{
 			height:34px;
 		}
-		.cls-1,.cls-3{
-			fill:$blanc-anti-eclat;
+		.cls-1,.cls-3,svg,svg g{
+			fill:$blanc-anti-eclat !important;
 		}
 		a{
 			border-bottom: 1px solid $gris-metal;
@@ -271,8 +271,8 @@ h1 {
 			&:hover,&.on{
 				background:$blanc-anti-eclat;
 				color:$rose-sombre;
-				.cls-1,.cls-3{
-					fill:$rose-sombre;
+				.cls-1,.cls-3,svg,svg g{
+					fill:$rose-sombre !important;
 				}
 			}
 			&.tableau{

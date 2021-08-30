@@ -238,8 +238,8 @@ h1.violet .cls-1, h1.violet .cls-3 {
 .rightnav .menu svg {
   height: 34px;
 }
-.rightnav .menu .cls-1, .rightnav .menu .cls-3 {
-  fill: #EFF0F3;
+.rightnav .menu .cls-1, .rightnav .menu .cls-3, .rightnav .menu svg, .rightnav .menu svg g {
+  fill: #EFF0F3 !important;
 }
 .rightnav .menu a {
   border-bottom: 1px solid #6B777E;
@@ -252,8 +252,8 @@ h1.violet .cls-1, h1.violet .cls-3 {
   background: #EFF0F3;
   color: #E24C6A;
 }
-.rightnav .menu a:hover .cls-1, .rightnav .menu a:hover .cls-3, .rightnav .menu a.on .cls-1, .rightnav .menu a.on .cls-3 {
-  fill: #E24C6A;
+.rightnav .menu a:hover .cls-1, .rightnav .menu a:hover .cls-3, .rightnav .menu a:hover svg, .rightnav .menu a:hover svg g, .rightnav .menu a.on .cls-1, .rightnav .menu a.on .cls-3, .rightnav .menu a.on svg, .rightnav .menu a.on svg g {
+  fill: #E24C6A !important;
 }
 .rightnav .menu a.tableau {
   border-top: 1px solid #EFF0F3;
