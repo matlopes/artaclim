@@ -1,3 +1,4 @@
+#CACHE{0}
 <BOUCLE_utilisateur(AUTEURS){id_auteur}{tout}>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 [(#REM) Cf.: http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
@@ -29,6 +30,18 @@
 						<div class="col-12">
 							<h1 class="mt-0 mb-0 text-uppercase violet  text-center">[(#CHEMIN{images/pict-utilisateurs-small.svg}|balise_svg{<:artaclim:gestion_utilisateurs:>})] <:artaclim:attribuer_indicateurs:></h1>
 							<h4 class="text-center">#NOM</h4>
+							<div class="row my-4">
+								<div class="col-12 mb-2">
+								<h5 class="text-uppercase"><:artaclim:thematique_utilisateur:></h5>
+								</div>
+								<div class="col-3">
+								<p><:artaclim:explications_thematique:></p>
+								</div>
+								<div class="col-9">
+									#FORMULAIRE_ATTRIBUERTHEMATIQUE{#ID_AUTEUR}
+								</div>
+							</div>
+							
 							<div class="ajax">
 							#FORMULAIRE_ATTRIBUERINDICATEURS{#ID_AUTEUR,#URL_PAGE{utilisateurs}}
 							</div>

@@ -7,9 +7,13 @@
 	
 	<form action="#ENV{action}#formulaire_joindre_document-#ENV{id,new}" method="post" enctype='multipart/form-data'><div>
 		#ACTION_FORMULAIRE
-
+		
+		#SET{indicateurs_thematique,#ARRAY}
+		<BOUCLE_motsthematique(MOTS){id_groupe=#ENV{id_thematique}}>
+		#SET{indicateurs_thematique,#GET{indicateurs_thematique}|push{#ID_MOT}}
+		</BOUCLE_motsthematique>
 		<select id="indicateurs" class="d-none" name="indicateurs[]" multiple>
-			<BOUCLE_indicateurs(INDICATEURS)>
+			<BOUCLE_indicateurs(INDICATEURS){id_mot IN #GET{indicateurs_thematique}}>
 				<option data-indicateur='indicateur#ID_INDICATEUR' value="#ID_INDICATEUR" [(#ID_INDICATEUR|in_array{#ENV{indicateurs}}|oui) selected]>#TITRE - #SOURCE - #LIEU</option>
 			</BOUCLE_indicateurs>
 		</select>
@@ -27,7 +31,7 @@
 					<div class="col-5">
 						<select class="filter custom-select form-control-sm">
 							<option value="*"><:artaclim:toutes_thematiques:></option>
-							<BOUCLE_mots(MOTS){id_groupe=1}>
+							<BOUCLE_mots(MOTS){id_groupe=#ENV{id_thematique}}{par titre}>
 							<option value="mot#ID_MOT">#TITRE</option>
 							</BOUCLE_mots>
 						</select>
@@ -35,7 +39,7 @@
 				</div>
 
 				<ul class="list list-unstyled mt-3 p-2">
-				<BOUCLE_biblio(INDICATEURS){!id_indicateur IN #ENV{indicateurs}}>
+				<BOUCLE_biblio(INDICATEURS){!id_indicateur IN #ENV{indicateurs}}{id_mot IN #GET{indicateurs_thematique}}>
 					<li id="indicateur#ID_INDICATEUR" [data-date="(#DATE|affdate{'Y-m-d'})"]  class="row mx-1 py-1 indicateur tags date  <BOUCLE_tags(MOTS){id_indicateur}> mot#ID_MOT</BOUCLE_tags>">
 						<div class="col-1 remove font-weight-bold">
 						<a href="#" class="">-</a>
@@ -60,7 +64,7 @@
 				</div>
 				<div id="list_selected" class="mt-2">
 				<ul class="list list-unstyled p-2">
-				<BOUCLE_selected(INDICATEURS){id_indicateur IN #ENV{indicateurs}}>
+				<BOUCLE_selected(INDICATEURS){id_indicateur IN #ENV{indicateurs}}{id_mot IN #GET{indicateurs_thematique}}>
 					<li id="indicateur#ID_INDICATEUR" [data-date="(#DATE|affdate{'Y-m-d'})"]  class="row mx-1 py-1 indicateur tags date  <BOUCLE_tags2(MOTS){id_indicateur}> mot#ID_MOT</BOUCLE_tags2>">
 						<div class="col-1 remove font-weight-bold">
 						<a href="#" class="">-</a>

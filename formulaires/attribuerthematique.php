@@ -11,9 +11,6 @@
 \***************************************************************************/
 
 /**
- * Gestion du formulaire de téléversement de documents
- *
- * @package SPIP\Medias\Formulaires
  */
 if (!defined('_ECRIRE_INC_VERSION')) {
 	return;
@@ -26,19 +23,13 @@ if (!defined('_ECRIRE_INC_VERSION')) {
  * @return array $valeurs
  *    Les valeurs chargées dans le formulaire
  */
-function formulaires_attribuerindicateurs_charger_dist(
-	$id_auteur,$url
+function formulaires_attribuerthematique_charger_dist(
+	$id_auteur,$url=""
 ) {
 	$valeurs = array();
 
-	$valeurs['id'] = $id_auteur;
-	$valeurs['id_auteur'] = $id_auteur;
-	$valeurs['indicateurs']=array();
-	$indicateurs = sql_allfetsel('id_objet','spip_auteurs_liens',"id_auteur=$id_auteur AND objet='indicateur'");
-	foreach($indicateurs as $indicateur){
-		$valeurs['indicateurs'][]=$indicateur['id_objet'];
-	}
 	$valeurs['id_thematique'] = 1; // Par défaut, c'est le groupe 1 : adaptation au changement climatique.
+	$valeurs['id_auteur'] = $id_auteur;
 	$thematiques = sql_allfetsel(
 		'id_objet',
 		'spip_auteurs_liens',
@@ -47,6 +38,7 @@ function formulaires_attribuerindicateurs_charger_dist(
 	if(isset($thematiques[0]['id_objet'])){
 		$valeurs['id_thematique']=$thematiques[0]['id_objet'];
 	}
+
 	return $valeurs;
 }
 
@@ -55,8 +47,8 @@ function formulaires_attribuerindicateurs_charger_dist(
  *
  * 
  */
-function formulaires_attribuerindicateurs_verifier_dist(
-	$id_auteur,$url
+function formulaires_attribuerthematique_verifier_dist(
+	$id_auteur,$url=""
 ) {
 
 	$erreurs = array();
@@ -71,8 +63,8 @@ function formulaires_attribuerindicateurs_verifier_dist(
  *
  *
  */
-function formulaires_attribuerindicateurs_traiter_dist(
-	$id_auteur,$url
+function formulaires_attribuerthematique_traiter_dist(
+	$id_auteur,$url=""
 ) {
 	$res=array();
 	$messages_erreur=array();
@@ -83,33 +75,13 @@ function formulaires_attribuerindicateurs_traiter_dist(
 		$res['message_ok'] = ' ok';
 	}
 
-	$avant=array();
-	$indicateurs = sql_allfetsel('id_objet','spip_auteurs_liens',"id_auteur=$id_auteur AND objet='indicateur'");
-	foreach($indicateurs as $indicateur){
-		$avant[]=$indicateur['id_objet'];
-	}
-
-	$apres=_request('indicateurs');
-
+	$id_thematique=intval(_request('id_thematique'));
 	include_spip('action/editer_liens');
+	objet_associer(array("auteur"=>$id_auteur), array("groupe_mots"=>$id_thematique));
+	objet_dissocier(array("auteur"=>$id_auteur), array("groupe_mots"=>array('NOT', $id_thematique)));
 
-	objet_associer(
-		array('auteur'=>$id_auteur),
-		array(
-			'indicateur'=>$apres,
-		)
-	);
-	objet_dissocier(
-		array('auteur'=>$id_auteur),
-		array(
-			'indicateur'=>array_diff($avant,$apres),
-		)
-	);
+	$res['redirect'] = generer_url_public('attribuer_indicateurs',array('id_auteur'=>$id_auteur));
 
-	$res['redirect'] = $url;
-	if(_request('retourindicateurs')){
-		$res['redirect'] = generer_url_public('utilisateurs');
-	}
 	return $res;
 }
 
