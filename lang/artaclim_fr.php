@@ -78,6 +78,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'fermer' =>'Fermer',
 	//G
 	'gestion_indicateurs' => "Gestion des indicateurs",
+	'gestion_thematiques' =>"Gestion des thématiques",
 	'gestion_utilisateurs' => "Gestion des utilisateurs",
 	//I
 	'imprimer' => 'Imprimer',
