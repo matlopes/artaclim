@@ -5,7 +5,7 @@
 <div class="menu fondgris pt-3 d-print-none">
 <div class="pb-2"><div id="flechemenu" class="d-inline-block text-center">[(#CHEMIN{images/pict-fleche-small.svg}balise_svg)]</div></div>
 <a href="#URL_SITE_SPIP" class="tableau d-block py-2 [(#ENV{home}|=={oui}|oui)on]" data-toggle="tooltip" title="<:artaclim:tableau_de_bord:>" data-placement="left"><div class="d-inline-flex align-items-center "><span class="logo text-center">[(#CHEMIN{images/img-tableau-bord.svg}|balise_svg)]</span><span class="label"><:artaclim:tableau_de_bord:></span></div></a>
-	<BOUCLE_menu(MOTS){id_groupe=#GET{id_groupe}}>
+<BOUCLE_menu(MOTS){id_groupe=#GET{id_groupe}}{par titre, num titre}>
 <a [href="(#URL_MOT)"] class="[(#EXPOSE)] d-block py-2" data-toggle="tooltip" [title="(#TITRE|attribut_html)"] data-placement="left"><div class="d-inline-flex align-items-center"><span class="logo text-center ">[(#CHEMIN{images/thematique#ID_MOT.svg}|balise_svg|inserer_attribut{width,''}|inserer_attribut{height,''})]</span><span class="label">#TITRE</span></div></a>
 	</BOUCLE_menu>
 </div>
