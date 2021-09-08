@@ -1,22 +1,21 @@
-#Plugin artaclim
+# Plugin artaclim
 
 Ce plugin pour le [CMS SPIP](https://www.spip.net) contient l'ensemble des fonctionnalités du projet Assistant.
 
 Il doit être installé dans le répertoire plugins de SPIP en version >= 3.2.7.
 
 
-##Modification des fichiers css du projet
+## Modification des fichiers css du projet
 
 Les différentes variables issus du travail de graphisme sont stockées et modifiables dans le fichier variables.scss
 
 Il faut ensuite générer les fichiers artaclim.css et bootstrap-artaclim.css gràce aux commandes suivantes:
 
-'''bash
-sass scss/bootstrap-artaclim.scss css/bootstrap-artaclim.css
-sass scss/artaclim.scss css/artaclim.css
-'''
+    sass scss/bootstrap-artaclim.scss css/bootstrap-artaclim.css
+    sass scss/artaclim.scss css/artaclim.css
 
-##Licences
+
+## Licences
 
 Ce plugin est placé sous licence [GPL 3](https://www.gnu.org/licenses/gpl-3.0.html)
 
